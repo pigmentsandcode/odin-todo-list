@@ -9,6 +9,18 @@ export class Todo {
     this.projectId = newTodo.projectId;
   }
 
+  getId() {
+    return this.id;
+  }
+
+  getProjectId() {
+    return this.projectId;
+  }
+
+  setProjectId(newProjectId) {
+    this.projectId = newProjectId;
+  }
+
   getTodo() {
     return {
       id: this.id,
@@ -27,6 +39,6 @@ export class Todo {
     this.dueDate = updatedTodo.dueDate;
     this.priority = updatedTodo.priority;
     this.status = updatedTodo.status;
-    this.projectId = this.projectId;
+    this.projectId = updatedTodo.projectId;
   }
 }
