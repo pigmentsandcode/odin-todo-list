@@ -1,9 +1,9 @@
 export class Project {
-  constructor(title) {
-    this.id = crypto.randomUUID();
-    this.title = title;
+  constructor(newProject) {
+    this.id = newProject.id;
+    this.title = newProject.title;
 
-    this.todos = []; //ids of todos belonging to project
+    this.todos = newProject.todos; //ids of todos belonging to project
   }
 
   getId() {

@@ -4,8 +4,8 @@ export class Todo {
     this.description = newTodo.description;
     this.dueDate = newTodo.dueDate;
     this.priority = newTodo.priority;
-    this.id = crypto.randomUUID();
-    this.status = "incomplete";
+    this.id = newTodo.id;
+    this.status = newTodo.status;
     this.projectId = newTodo.projectId;
   }
 

@@ -1,3 +1,4 @@
 import "./styles.css";
+import { TodoList } from "./TodoList";
 
-console.log("Hello test");
+const newTodoList = new TodoList();
