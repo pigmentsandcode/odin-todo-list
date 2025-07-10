@@ -38,10 +38,25 @@ header {
 main {
   display: grid;
   grid-template-columns: 1fr 6fr;
+  column-gap: 1rem;
+  padding-top: 0.5rem;
 }
 
 /*  Sidebar Navigation  */
 nav {
   padding-left: 1rem;
-  padding-top: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  border: 1px black solid;
+}
+
+.nav-project-item {
+  margin-left: 10px;
 }
