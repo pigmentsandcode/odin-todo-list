@@ -60,3 +60,20 @@ nav {
 .nav-project-item {
   margin-left: 10px;
 }
+
+/*  Main Content  */
+/*  Project Display */
+.project-title-div {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.project-title-div h2 {
+  font-size: 3.5rem;
+}
+
+.project-title-div button {
+  height: 2rem;
+  align-self: center;
+}

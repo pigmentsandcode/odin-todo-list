@@ -10,7 +10,9 @@
     <main>
       <nav>
         <ul class="nav-list">
-          <li class="nav-item"><h2 class="nav-title">Default</h2></li>
+          <li class="nav-item" data-id="default-id">
+            <h2 class="nav-title">Default</h2>
+          </li>
           <li class="nav-item"><h2 class="nav-title">Today</h2></li>
           <li class="nav-item"><h2 class="nav-title">7 Days</h2></li>
           <li class="nav-item">
@@ -27,14 +29,28 @@
           </li>
         </ul>
       </nav>
-      <section id="main-content">
-        <h3 class="test-h3">Test</h3>
-        <p class="test-p">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus
-          voluptatem fuga animi sunt quam, minima recusandae obcaecati assumenda
-          et veritatis, nulla velit pariatur, culpa voluptas voluptatibus quia
-          quibusdam deserunt molestias.
-        </p>
+      <section id="main-content" data-id="project-id">
+        <div class="project-title-div">
+          <h2 class="project-title">Project Test</h2>
+          <button class="edit-btn" data-id="project-id">Edit</button>
+          <button class="delete-btn" data-id="project-id">Delete</button>
+        </div>
+        <ul class="todo-list flex-col">
+          <li class="todo-list-item" data-id="todo-id-1">
+            <ul>
+              <li class="todo-top">
+                <button class="complete-btn">Check</button>
+                <div class="todo-title-div">Todo Title 1</div>
+                <button class="edit-btn" data-id="todo-id-1">Edit</button>
+                <button class="delete-btn" data-id="todo-id-1">Delete</button>
+              </li>
+              <li class="todo-bottom">
+                <div class="todo-due-date">7/11/2025</div>
+                <div class="todo-priority high-priority">High</div>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </section>
     </main>
   </body>
