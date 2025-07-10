@@ -77,3 +77,43 @@ nav {
   height: 2rem;
   align-self: center;
 }
+
+/*  Todos List  */
+/*  Todos List Item */
+.todo-top {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.todo-top div.todo-title-div {
+  font-size: 1.6rem;
+}
+
+.todo-top button {
+  height: 1.25rem;
+}
+
+.todo-bottom {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 1.12rem;
+  align-items: center;
+}
+
+.priority {
+  border-radius: 15%;
+  padding: 0.4rem;
+}
+
+.high-priority {
+  background: lightpink;
+}
+
+.medium-priority {
+  background: rgb(212, 111, 71);
+}
+
+.low-priority {
+  background: rgb(98, 126, 179);
+}
