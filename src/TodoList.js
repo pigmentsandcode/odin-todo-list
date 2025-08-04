@@ -80,14 +80,34 @@ export class TodoList {
     }
 
     const moveTodoIds = this.projects.get(delProjectId).getProjectTodos();
-    moveTodoIds.forEach((todoId) => {
-      this.projects.get(this.defaultId).addTodo(todoId);
-      this.todos.get(todoId).setProjectId(this.defaultId);
-      this.projects.get(delProjectId).removeTodo(todoId);
-    });
+    this.moveTodos(moveTodoIds, this.defaultId, delProjectId);
     this.projects.delete(delProjectId);
     Storage.saveTodos(this.todos);
     Storage.saveProjects(this.projects);
+  }
+
+  deleteCompleteTodos(projectId) {
+    const projectTodosIds = this.projects.get(projectId).getProjectTodos();
+    projectTodosIds.forEach((todoId) => {
+      const todoStatus = this.todos.get(todoId).getTodo().status;
+      if (todoStatus === "complete") {
+        this.projects.get(projectId).removeTodo(todoId);
+        this.todos.delete(todoId);
+      }
+    });
+    Storage.saveProjects(this.projects);
+    Storage.saveTodos(this.todos);
+  }
+
+  getProjectTitles() {
+    let projectTitles = [];
+    this.projects.forEach((project) => {
+      projectTitles.push({
+        id: project.getId(),
+        title: project.getTitle(),
+      });
+    });
+    return projectTitles;
   }
 
   getProjects() {
@@ -96,6 +116,34 @@ export class TodoList {
 
   getTodos() {
     return this.todos;
+  }
+
+  getTodoInfo(todoId) {
+    return this.todos.get(todoId).getTodo();
+  }
+
+  getProjectTitle(projectID) {
+    return this.projects.get(projectID).getTitle();
+  }
+
+  getProjectTodos(projectId) {
+    return this.projects.get(projectId).getProjectTodos();
+  }
+
+  clearProjectTodos(projectId) {
+    const moveTodosIds = this.projects.get(projectId).getProjectTodos();
+    this.moveTodos(moveTodosIds, this.defaultId, projectId);
+    this.projects.get(projectId).clearProjectTodos();
+    Storage.saveTodos(this.todos);
+    Storage.saveProjects(this.todos);
+  }
+
+  moveTodos(moveTodosIds, newProjectId, oldProjectId) {
+    moveTodosIds.forEach((todoId) => {
+      this.projects.get(newProjectId).addTodo(todoId);
+      this.todos.get(todoId).setProjectId(newProjectId);
+      this.projects.get(oldProjectId).removeTodo(todoId);
+    });
   }
 
   printDefaultProject() {

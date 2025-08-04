@@ -40,4 +40,8 @@ export class Project {
       projectTodos: this.todos,
     };
   }
+
+  clearTodos() {
+    this.todos = [];
+  }
 }
