@@ -24,7 +24,7 @@ export class UIController {
     mainContentEl.innerHTML = "";
 
     const projectTitleDiv = document.createElement("div");
-    projectTitleDiv.classList("project-title-div");
+    projectTitleDiv.classList.add("project-title-div");
 
     const projectTitleEl = document.createElement("h2");
     projectTitleEl.classList.add("project-title");
@@ -47,7 +47,7 @@ export class UIController {
 
     /*  Project Todos List */
     const todoListULEl = document.createElement("ul");
-    todoListULEl.classList("todo-list", "flex-col");
+    todoListULEl.classList.add("todo-list", "flex-col");
 
     todos.forEach((todo) => {
       const todoListItemEl = document.createElement("li");
@@ -57,41 +57,41 @@ export class UIController {
       const todoItemULEl = document.createElement("ul");
       /*  Todo Item Top */
       const todoItemTopEl = document.createElement("li");
-      todoItemTopEl.classList("todo-top");
+      todoItemTopEl.classList.add("todo-top");
 
       const completeBtnEl = document.createElement("button");
       completeBtnEl.classList.add("complete-btn");
       completeBtnEl.setAttribute("data-id", todo.id);
       completeBtnEl.textContent = "check";
-      completeBtnEl.addEventListener("click", handleTodoCompleteClick);
+      completeBtnEl.addEventListener("click", handlers.todoCompleteClick);
       todoItemTopEl.appendChild(completeBtnEl);
 
       const todoTitleEl = document.createElement("div");
       todoTitleEl.classList.add("todo-title-div");
-      todoItemTopEl.textContent = todo.title;
+      todoTitleEl.textContent = todo.title;
       todoItemTopEl.appendChild(todoTitleEl);
 
       const todoEditBtnEl = document.createElement("button");
       todoEditBtnEl.classList.add("edit-btn");
       todoEditBtnEl.setAttribute("data-id", todo.id);
       todoEditBtnEl.textContent = "Edit";
-      todoEditBtnEl.addEventListener("click", handleTodoEditClick);
+      todoEditBtnEl.addEventListener("click", handlers.todoEditClick);
       todoItemTopEl.appendChild(todoEditBtnEl);
 
       const todoDelBtnEl = document.createElement("button");
       todoDelBtnEl.classList.add("delete-btn");
       todoDelBtnEl.setAttribute("data-id", todo.id);
       todoDelBtnEl.textContent = "Delete";
-      todoDelBtnEl.addEventListener("click", handleTodoDelClick);
+      todoDelBtnEl.addEventListener("click", handlers.todoDelClick);
       todoItemTopEl.appendChild(todoDelBtnEl);
 
       todoItemULEl.appendChild(todoItemTopEl);
       /* Todo Item Bottom */
       const todoItemBottomEl = document.createElement("li");
-      todoItemBottomEl.classList("todo-bottom");
+      todoItemBottomEl.classList.add("todo-bottom");
 
       const todoDueDateEl = document.createElement("div");
-      todoDueDateEl.classList("todo-due-date");
+      todoDueDateEl.classList.add("todo-due-date");
       // TODO: formate date
       todoDueDateEl.textContent = todo.dueDate;
       todoItemBottomEl.appendChild(todoDueDateEl);
@@ -107,6 +107,7 @@ export class UIController {
 
       todoItemULEl.appendChild(todoItemBottomEl);
       todoListItemEl.appendChild(todoItemULEl);
+      todoListULEl.appendChild(todoListItemEl);
     });
 
     mainContentEl.appendChild(todoListULEl);

@@ -41,7 +41,7 @@ function onLoad() {
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
   };
-  const defaultProjectID = newTodoList.getDefaultID();
+  const defaultProjectID = newTodoList.getDefaultId();
   const defaultProjectTitle = newTodoList.getProjectTitle(defaultProjectID);
   const defaultTodos = newTodoList.getProjectTodos(defaultProjectID);
   uiController.displayProjectPage(
@@ -51,3 +51,5 @@ function onLoad() {
     defaultTodos
   );
 }
+
+onLoad();

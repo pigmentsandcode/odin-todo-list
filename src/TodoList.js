@@ -7,6 +7,7 @@ export class TodoList {
   constructor() {
     this.projects = new Map();
     this.todos = new Map();
+    this.defaultId = "";
 
     Storage.fetchProjects(this.projects);
     if (this.projects.size === 0) {
@@ -118,6 +119,10 @@ export class TodoList {
     return this.todos;
   }
 
+  getDefaultId() {
+    return this.defaultId;
+  }
+
   getTodoInfo(todoId) {
     return this.todos.get(todoId).getTodo();
   }
@@ -127,7 +132,12 @@ export class TodoList {
   }
 
   getProjectTodos(projectId) {
-    return this.projects.get(projectId).getProjectTodos();
+    const projectTodoIds = this.projects.get(projectId).getProjectTodos();
+    const projectTodosInfo = [];
+    projectTodoIds.forEach((id) => {
+      projectTodosInfo.push(this.todos.get(id).getTodo());
+    });
+    return projectTodosInfo;
   }
 
   clearProjectTodos(projectId) {
