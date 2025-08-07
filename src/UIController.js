@@ -5,7 +5,15 @@ export class UIController {
     const navProjectsListEl = document.querySelector(".projects-list");
     projects.forEach((project) => {
       if (project.title !== "Default") {
-        addProjectSidebar(project, handleNavProjectClick, navProjectsListEl);
+        this.addProjectSidebar(
+          project,
+          handleNavProjectClick,
+          navProjectsListEl
+        );
+      } else {
+        const defaultEl = document.querySelector("#default-li .nav-title");
+        defaultEl.setAttribute("data-id", project.id);
+        defaultEl.addEventListener("click", handleNavProjectClick);
       }
     });
   }

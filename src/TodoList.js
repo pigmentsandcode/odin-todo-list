@@ -43,7 +43,10 @@ export class TodoList {
     Storage.saveProjects(this.projects);
   }
 
-  createProject(newProject) {
+  createProject(newProjectTitle) {
+    const newProject = {
+      title: newProjectTitle,
+    };
     newProject.id = crypto.randomUUID();
     newProject.todos = [];
     const project = new Project(newProject);

@@ -19,6 +19,7 @@ function handleTodoDelClick(e) {
 
 function handleNavProjectClick(e) {
   const projectID = e.target.dataset.id;
+  console.log("target: " + e.target);
   const projectTitle = newTodoList.getProjectTitle(projectID);
   const todos = newTodoList.getProjectTodos(projectID);
   const handlers = {
