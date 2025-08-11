@@ -1,4 +1,25 @@
-function getTodoForm() {
+export function getPopup(popupType, popupAction = "", data = {}) {
+  const generalType =
+    popupType === "project" || popupType === "todo" ? popupType : "confirm";
+  const popupHTMLFunc = popupTypes[popupType];
+  let popupHTML = "";
+  if (popupType === "project" || popupType === "todo") {
+    popupHTML = popupHTMLFunc(popupAction, data);
+  } else {
+    popupHTML = popupHTMLFunc;
+  }
+  return `
+    <dialog class="popup ${generalType}-popup" id="${generalType}">
+    <div class="popup-header">
+    <h3 class="popup-title">Popup</h3>
+    <div class="popup-exit">X</div>
+    </div>
+    ${popupHTML}
+    </dialog>
+  `;
+}
+
+function getTodoForm(action, data) {
   return `
         <form action="#" class="popup-form" autocomplete="off">
           <div class="popup-input-title popup-input-area">
@@ -43,14 +64,16 @@ function getTodoForm() {
     `;
 }
 
-function getProjectForm() {
+function getProjectForm(action, data) {
+  console.log("popup action: " + action);
+  console.log("popup data: " + data);
   return `
     <form action="#" class="popup-form" autocomplete="off">
     <div class="popup-input-title popup-input-area">
         <input type="text" class="popup-input" id="mainTitle" name="mainTitle" />
         <label for="mainTitle"><span>Title</span></label>
     </div>
-    <button class="popup-btn btn" type="submit">Save Project</button>
+    <button class="popup-btn btn" type="submit">Add Project</button>
     </form>
     `;
 }
@@ -75,7 +98,7 @@ const confirmTexts = {
       "If you delete this project, all todos will be moved to the default project. Are you sure you want to permanently delete this project?",
     buttonText: "Delete",
   },
-  clearProjectTasks: {
+  clearProjectTodos: {
     confirmText:
       "This will clear all todos from this project and send them to the default project. Are you sure you want to do this?",
     buttonText: "Clear Todos",
@@ -85,4 +108,13 @@ const confirmTexts = {
       "This will permanently delete all completed todos in this project. Are you sure you want to do this?",
     buttonText: "Delete completed",
   },
+};
+
+const popupTypes = {
+  project: getProjectForm,
+  todo: getTodoForm,
+  delTodo: getConfirmPopup("deleteTodo"),
+  delProject: getConfirmPopup("deleteProject"),
+  clearProTodos: getConfirmPopup("clearProjectTodos"),
+  delCompleted: getConfirmPopup("deleteCompleted"),
 };

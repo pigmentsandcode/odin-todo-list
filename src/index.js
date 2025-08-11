@@ -30,7 +30,26 @@ function handleNavProjectClick(e) {
   uiController.displayProjectPage(projectID, projectTitle, handlers, todos);
 }
 
+function handleProjectFormSubmit(e) {
+  e.preventDefault();
+  const data = new FormData(e.target);
+  newTodoList.createProject(data.get("mainTitle"));
+  uiController.closePopup("project", handleProjectFormSubmit);
+  uiController.populateSidebar(
+    newTodoList.getProjects(),
+    handleNavProjectClick
+  );
+}
+
+function handleAddProjectClick(e) {
+  uiController.displayAddProjectPopup(handleProjectFormSubmit);
+}
+
 function onLoad() {
+  uiController.addSidebarListeners({
+    addProjectClick: handleAddProjectClick,
+  });
+
   uiController.populateSidebar(
     newTodoList.getProjects(),
     handleNavProjectClick

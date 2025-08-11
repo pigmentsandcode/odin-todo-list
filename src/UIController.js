@@ -1,8 +1,26 @@
+import { getPopup } from "./html-templates";
+
 export class UIController {
   constructor() {}
 
+  createButtonElement(btnClass, btnId, btnText, btnHandler) {
+    const btnEl = document.createElement("button");
+    btnEl.classList.add(btnClass);
+    btnEl.setAttribute("data-id", btnId);
+    btnEl.textContent = btnText;
+    btnEl.addEventListener("click", btnHandler);
+    return btnEl;
+  }
+
+  addSidebarListeners(handlers) {
+    document
+      .querySelector(`[data-id="new-project"]`)
+      .addEventListener("click", handlers.addProjectClick);
+  }
+
   populateSidebar(projects, handleNavProjectClick) {
     const navProjectsListEl = document.querySelector(".projects-list");
+    navProjectsListEl.innerHTML = "";
     projects.forEach((project) => {
       if (project.title !== "Default") {
         this.addProjectSidebar(
@@ -67,11 +85,13 @@ export class UIController {
       const todoItemTopEl = document.createElement("li");
       todoItemTopEl.classList.add("todo-top");
 
-      const completeBtnEl = document.createElement("button");
-      completeBtnEl.classList.add("complete-btn");
-      completeBtnEl.setAttribute("data-id", todo.id);
-      completeBtnEl.textContent = "check";
-      completeBtnEl.addEventListener("click", handlers.todoCompleteClick);
+      const completeBtnEl = this.createButtonElement(
+        "complete-btn",
+        todo.id,
+        "check",
+        handlers.todoCompleteClick
+      );
+
       todoItemTopEl.appendChild(completeBtnEl);
 
       const todoTitleEl = document.createElement("div");
@@ -79,18 +99,20 @@ export class UIController {
       todoTitleEl.textContent = todo.title;
       todoItemTopEl.appendChild(todoTitleEl);
 
-      const todoEditBtnEl = document.createElement("button");
-      todoEditBtnEl.classList.add("edit-btn");
-      todoEditBtnEl.setAttribute("data-id", todo.id);
-      todoEditBtnEl.textContent = "Edit";
-      todoEditBtnEl.addEventListener("click", handlers.todoEditClick);
+      const todoEditBtnEl = this.createButtonElement(
+        "edit-btn",
+        todo.id,
+        "Edit",
+        handlers.todoEditClick
+      );
       todoItemTopEl.appendChild(todoEditBtnEl);
 
-      const todoDelBtnEl = document.createElement("button");
-      todoDelBtnEl.classList.add("delete-btn");
-      todoDelBtnEl.setAttribute("data-id", todo.id);
-      todoDelBtnEl.textContent = "Delete";
-      todoDelBtnEl.addEventListener("click", handlers.todoDelClick);
+      const todoDelBtnEl = this.createButtonElement(
+        "delete-btn",
+        todo.id,
+        "Delete",
+        handlers.todoDelClick
+      );
       todoItemTopEl.appendChild(todoDelBtnEl);
 
       todoItemULEl.appendChild(todoItemTopEl);
@@ -119,5 +141,20 @@ export class UIController {
     });
 
     mainContentEl.appendChild(todoListULEl);
+  }
+
+  displayAddProjectPopup(handleProjectFormSubmit) {
+    document.body.insertAdjacentHTML("beforeend", getPopup("project", "add"));
+    document
+      .querySelector(".popup-form")
+      .addEventListener("submit", handleProjectFormSubmit);
+    document.querySelector("#project").showModal();
+  }
+
+  closePopup(popupId, handleProjectFormSubmit) {
+    document
+      .querySelector(".popup-form")
+      .removeEventListener("submit", handleProjectFormSubmit);
+    document.querySelector(`#${popupId}`).close();
   }
 }
