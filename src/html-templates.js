@@ -1,12 +1,12 @@
-export function getPopup(popupType, popupAction = "", data = {}) {
+export function getPopup(popupType, data = {}, popupAction = "") {
   const generalType =
     popupType === "project" || popupType === "todo" ? popupType : "confirm";
-  const popupHTMLFunc = popupTypes[popupType];
+  const popupHTMLFunc = popupTypes[generalType];
   let popupHTML = "";
   if (popupType === "project" || popupType === "todo") {
     popupHTML = popupHTMLFunc(popupAction, data);
   } else {
-    popupHTML = popupHTMLFunc;
+    popupHTML = popupHTMLFunc(popupType, data.id);
   }
   return `
     <dialog class="popup ${generalType}-popup" id="${generalType}">
@@ -84,12 +84,12 @@ function getProjectForm(action, data) {
     `;
 }
 
-function getConfirmPopup(popupType) {
-  `<div class="popup-body">
+function getConfirmPopup(popupType, targetID) {
+  return `<div class="popup-body">
     <p class="popup-text">${confirmTexts[popupType].confirmText}</p>
     <div class="popup-buttons">
-      <button class="popup-btn btn" type="button">Cancel</button>
-      <button class="popup-btn btn" type="button">${confirmTexts[popupType].buttonText}</button>
+      <button class="popup-btn btn" type="button" id="cancel-btn">Cancel</button>
+      <button class="popup-btn btn" type="button" id="confirm-btn" data-id="${targetID}">${confirmTexts[popupType].buttonText}</button>
     </div>
   </div>`;
 }
@@ -119,8 +119,5 @@ const confirmTexts = {
 const popupTypes = {
   project: getProjectForm,
   todo: getTodoForm,
-  delTodo: getConfirmPopup("deleteTodo"),
-  delProject: getConfirmPopup("deleteProject"),
-  clearProTodos: getConfirmPopup("clearProjectTodos"),
-  delCompleted: getConfirmPopup("deleteCompleted"),
+  confirm: getConfirmPopup,
 };

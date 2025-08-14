@@ -6,7 +6,6 @@ const newTodoList = new TodoList();
 const uiController = new UIController();
 
 function handleProjectEditClick(e) {
-  console.log("Handle Project Edit Click: " + e.target.dataset.id);
   const projectID = e.target.dataset.id;
   const currTitle = newTodoList.getProjectTitle(projectID);
   uiController.displayEditProjectPopup(handleProjectFormSubmit, {
@@ -16,7 +15,25 @@ function handleProjectEditClick(e) {
 }
 
 function handleProjectDelClick(e) {
-  console.log("Handle project delete click for: " + e.target.dataset.id);
+  const projectID = e.target.dataset.id;
+  uiController.displayDelProjConfirmPopup(
+    {
+      handleDelProjConfirm: handleDelProjConfirmClick,
+    },
+    projectID
+  );
+}
+
+function handleDelProjConfirmClick(e) {
+  newTodoList.deleteProject(e.target.dataset.id);
+  loadDefaultProjectPage();
+  uiController.closeConfirmPopup("confirm", {
+    handleDelProjConfirm: handleDelProjConfirmClick,
+  });
+  uiController.populateSidebar(
+    newTodoList.getProjects(),
+    handleNavProjectClick
+  );
 }
 
 function handleTodoCompleteClick(e) {
@@ -77,17 +94,7 @@ function handleAddProjectClick(e) {
   uiController.displayAddProjectPopup(handleProjectFormSubmit);
 }
 
-function onLoad() {
-  uiController.addSidebarListeners({
-    addProjectClick: handleAddProjectClick,
-  });
-
-  uiController.populateSidebar(
-    newTodoList.getProjects(),
-    handleNavProjectClick
-  );
-
-  /*    Load Default project page */
+function loadDefaultProjectPage() {
   const handlers = {
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
@@ -102,6 +109,20 @@ function onLoad() {
     handlers,
     defaultTodos
   );
+}
+
+function onLoad() {
+  uiController.addSidebarListeners({
+    addProjectClick: handleAddProjectClick,
+  });
+
+  uiController.populateSidebar(
+    newTodoList.getProjects(),
+    handleNavProjectClick
+  );
+
+  /*    Load Default project page */
+  loadDefaultProjectPage();
 }
 
 onLoad();

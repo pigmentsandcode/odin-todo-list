@@ -168,11 +168,31 @@ export class UIController {
     document.querySelector("#project").showModal();
   }
 
+  displayDelProjConfirmPopup(handlers, projectID) {
+    console.log("inside display popup " + projectID);
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("deleteProject", { id: projectID })
+    );
+    document
+      .querySelector("#confirm-btn")
+      .addEventListener("click", handlers.handleDelProjConfirm);
+    document.querySelector("#confirm").showModal();
+  }
+
   closePopup(popupId, handleProjectFormSubmit) {
     document
       .querySelector(".popup-form")
       .removeEventListener("submit", handleProjectFormSubmit);
     document.querySelector(`#${popupId}`).close();
     document.querySelector(`#${popupId}`).remove();
+  }
+
+  closeConfirmPopup(popupID, handlers) {
+    document
+      .querySelector("#confirm-btn")
+      .removeEventListener("click", handlers.handleDelProjConfirm);
+    document.querySelector(`#${popupID}`).close();
+    document.querySelector(`#${popupID}`).remove();
   }
 }
