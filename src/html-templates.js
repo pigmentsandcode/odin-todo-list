@@ -68,12 +68,18 @@ function getProjectForm(action, data) {
   console.log("popup action: " + action);
   console.log("popup data: " + data);
   return `
-    <form action="#" class="popup-form" autocomplete="off">
+    <form action="#" class="popup-form" autocomplete="off" data-id="${
+      action === "edit" ? data.projectID : ""
+    }">
     <div class="popup-input-title popup-input-area">
-        <input type="text" class="popup-input" id="mainTitle" name="mainTitle" />
+        <input type="text" class="popup-input" id="mainTitle" name="mainTitle" value="${
+          data.currTitle ? data.currTitle : ""
+        }" />
         <label for="mainTitle"><span>Title</span></label>
     </div>
-    <button class="popup-btn btn" type="submit">Add Project</button>
+    <button class="popup-btn btn" type="submit">${
+      action === "add" ? "Add" : "Edit"
+    } Project</button>
     </form>
     `;
 }

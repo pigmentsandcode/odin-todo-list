@@ -57,17 +57,23 @@ export class UIController {
     projectTitleEl.textContent = projectTitleText;
     projectTitleDiv.appendChild(projectTitleEl);
 
-    const projectEditBtnEl = document.createElement("button");
-    projectEditBtnEl.classList.add("edit-btn");
-    projectEditBtnEl.setAttribute("data-id", projectID);
-    projectEditBtnEl.textContent = "Edit";
-    projectTitleDiv.appendChild(projectEditBtnEl);
+    if (projectTitleText !== "Default") {
+      const projectEditBtnEl = this.createButtonElement(
+        "edit-btn",
+        projectID,
+        "Edit",
+        handlers.projectEditClick
+      );
+      projectTitleDiv.appendChild(projectEditBtnEl);
 
-    const projectDelBtnEl = document.createElement("button");
-    projectDelBtnEl.classList.add("delete-btn");
-    projectDelBtnEl.setAttribute("data-id", projectID);
-    projectDelBtnEl.textContent = "Delete";
-    projectTitleDiv.appendChild(projectDelBtnEl);
+      const projectDelBtnEl = this.createButtonElement(
+        "delete-btn",
+        projectID,
+        "Delete",
+        handlers.projectDelClick
+      );
+      projectTitleDiv.appendChild(projectDelBtnEl);
+    }
 
     mainContentEl.appendChild(projectTitleDiv);
 
@@ -151,10 +157,22 @@ export class UIController {
     document.querySelector("#project").showModal();
   }
 
+  displayEditProjectPopup(handleProjectFormSubmit, data) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("project", "edit", data)
+    );
+    document
+      .querySelector(".popup-form")
+      .addEventListener("submit", handleProjectFormSubmit);
+    document.querySelector("#project").showModal();
+  }
+
   closePopup(popupId, handleProjectFormSubmit) {
     document
       .querySelector(".popup-form")
       .removeEventListener("submit", handleProjectFormSubmit);
     document.querySelector(`#${popupId}`).close();
+    document.querySelector(`#${popupId}`).remove();
   }
 }

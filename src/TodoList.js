@@ -52,6 +52,7 @@ export class TodoList {
     const project = new Project(newProject);
     this.projects.set(newProject.id, project);
     Storage.saveProjects(this.projects);
+    return newProject.id;
   }
 
   editTodo(update) {

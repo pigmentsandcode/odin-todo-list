@@ -5,6 +5,20 @@ import { UIController } from "./UIController";
 const newTodoList = new TodoList();
 const uiController = new UIController();
 
+function handleProjectEditClick(e) {
+  console.log("Handle Project Edit Click: " + e.target.dataset.id);
+  const projectID = e.target.dataset.id;
+  const currTitle = newTodoList.getProjectTitle(projectID);
+  uiController.displayEditProjectPopup(handleProjectFormSubmit, {
+    projectID: projectID,
+    currTitle: currTitle,
+  });
+}
+
+function handleProjectDelClick(e) {
+  console.log("Handle project delete click for: " + e.target.dataset.id);
+}
+
 function handleTodoCompleteClick(e) {
   console.log("Handle Todo Complete Click for: " + e.target.dataset.id);
 }
@@ -19,10 +33,11 @@ function handleTodoDelClick(e) {
 
 function handleNavProjectClick(e) {
   const projectID = e.target.dataset.id;
-  console.log("target: " + e.target);
   const projectTitle = newTodoList.getProjectTitle(projectID);
   const todos = newTodoList.getProjectTodos(projectID);
   const handlers = {
+    projectEditClick: handleProjectEditClick,
+    projectDelClick: handleProjectDelClick,
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
@@ -33,12 +48,29 @@ function handleNavProjectClick(e) {
 function handleProjectFormSubmit(e) {
   e.preventDefault();
   const data = new FormData(e.target);
-  newTodoList.createProject(data.get("mainTitle"));
+  const title = data.get("mainTitle");
+  let projectID = e.target.dataset.id;
+  if (projectID === "") {
+    projectID = newTodoList.createProject(title);
+  } else {
+    newTodoList.editProjectTitle(projectID, title);
+  }
+
   uiController.closePopup("project", handleProjectFormSubmit);
   uiController.populateSidebar(
     newTodoList.getProjects(),
     handleNavProjectClick
   );
+
+  const todos = newTodoList.getProjectTodos(projectID);
+  const handlers = {
+    projectEditClick: handleProjectEditClick,
+    projectDelClick: handleProjectDelClick,
+    todoCompleteClick: handleTodoCompleteClick,
+    todoEditClick: handleTodoEditClick,
+    todoDelClick: handleTodoDelClick,
+  };
+  uiController.displayProjectPage(projectID, title, handlers, todos);
 }
 
 function handleAddProjectClick(e) {
