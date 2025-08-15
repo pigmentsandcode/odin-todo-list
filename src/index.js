@@ -36,6 +36,47 @@ function handleDelProjConfirmClick(e) {
   );
 }
 
+function handleTodoFormSubmit(e) {
+  e.preventDefault();
+  const data = new FormData(e.target);
+  const title = data.get("mainTitle");
+  const description = data.get("description");
+  const project = data.get("project");
+  const dueDate = data.get("dueDate");
+  const priority = data.get("priority");
+  let todoID = e.target.dataset.id;
+  if (todoID === "") {
+    todoID = newTodoList.createTodo({
+      title: title,
+      description: description,
+      dueDate: dueDate,
+      priority: priority,
+      projectId: project,
+    });
+  } else {
+    newTodoList.editTodo(todoID, title);
+  }
+
+  uiController.closePopup("todo", handleTodoFormSubmit);
+  console.log("completed handle todo form submit");
+
+  const handlers = {
+    todoCompleteClick: handleTodoCompleteClick,
+    todoEditClick: handleTodoEditClick,
+    todoDelClick: handleTodoDelClick,
+  };
+  //uiController.displayProjectPage(projectID, title, handlers, todos);
+  uiController.addNewTodoToProjectPage(
+    newTodoList.getTodoInfo(todoID),
+    handlers
+  );
+}
+
+function handleAddTodoClick(e) {
+  console.log("Handle add todo click: " + e.target.dataset.id);
+  uiController.displayAddTodoPopup(handleTodoFormSubmit);
+}
+
 function handleTodoCompleteClick(e) {
   console.log("Handle Todo Complete Click for: " + e.target.dataset.id);
 }
@@ -55,6 +96,7 @@ function handleNavProjectClick(e) {
   const handlers = {
     projectEditClick: handleProjectEditClick,
     projectDelClick: handleProjectDelClick,
+    addTodoClick: handleAddTodoClick,
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
@@ -83,6 +125,7 @@ function handleProjectFormSubmit(e) {
   const handlers = {
     projectEditClick: handleProjectEditClick,
     projectDelClick: handleProjectDelClick,
+    addTodoClick: handleAddTodoClick,
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
@@ -96,6 +139,7 @@ function handleAddProjectClick(e) {
 
 function loadDefaultProjectPage() {
   const handlers = {
+    addTodoClick: handleAddTodoClick,
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,

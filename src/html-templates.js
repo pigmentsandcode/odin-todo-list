@@ -21,14 +21,16 @@ export function getPopup(popupType, data = {}, popupAction = "") {
 
 function getTodoForm(action, data) {
   return `
-        <form action="#" class="popup-form" autocomplete="off">
+        <form action="#" class="popup-form" autocomplete="off" data-id="${
+          action === "edit" ? data.todoID : ""
+        }">
           <div class="popup-input-title popup-input-area">
             <input
               class="popup-input"
               type="text"
               id="mainTitle"
               name="mainTitle"
-              placeholder=""
+              value="${data.currTitle ? data.currTitle : ""}"
               required
             />
             <label for="mainTitle"><span>Title</span></label>
@@ -38,7 +40,7 @@ function getTodoForm(action, data) {
               name="description"
               id="description"
               class="popup-input"
-              placeholder=""
+              value="${data.currDescript ? data.currDescript : ""}"
             ></textarea>
             <label for="description"><span>Description</span></label>
           </div>

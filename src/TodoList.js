@@ -31,7 +31,9 @@ export class TodoList {
   }
 
   createTodo(newTodo) {
-    newTodo.projectId = this.defaultId;
+    if (!newTodo.projectId) {
+      newTodo.projectId = this.defaultId;
+    }
     newTodo.id = crypto.randomUUID();
     newTodo.status = "incomplete";
     const todo = new Todo(newTodo);
@@ -41,6 +43,8 @@ export class TodoList {
     //adds new todo's id to default project's todos arr
     this.projects.get(this.defaultId).addTodo(todo.getId());
     Storage.saveProjects(this.projects);
+
+    return todo.getId();
   }
 
   createProject(newProjectTitle) {

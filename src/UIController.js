@@ -77,6 +77,19 @@ export class UIController {
 
     mainContentEl.appendChild(projectTitleDiv);
 
+    /*  Add Todo Button */
+    const addTodoDivEl = document.createElement("div");
+    addTodoDivEl.classList = "add-todo-div";
+    const addTodoBtnEl = this.createButtonElement(
+      "add-todo-btn",
+      "addTodoBtn",
+      "Add Todo",
+      handlers.addTodoClick
+    );
+
+    addTodoDivEl.appendChild(addTodoBtnEl);
+    mainContentEl.appendChild(addTodoDivEl);
+
     /*  Project Todos List */
     const todoListULEl = document.createElement("ul");
     todoListULEl.classList.add("todo-list", "flex-col");
@@ -149,12 +162,86 @@ export class UIController {
     mainContentEl.appendChild(todoListULEl);
   }
 
+  addNewTodoToProjectPage(todo, handlers) {
+    const todoListULEl = document.querySelector(".todo-list");
+    const todoListItemEl = document.createElement("li");
+    todoListItemEl.classList.add("todo-list-item");
+    todoListItemEl.setAttribute("data-id", todo.id);
+
+    const todoItemULEl = document.createElement("ul");
+    /*  Todo Item Top */
+    const todoItemTopEl = document.createElement("li");
+    todoItemTopEl.classList.add("todo-top");
+
+    const completeBtnEl = this.createButtonElement(
+      "complete-btn",
+      todo.id,
+      "check",
+      handlers.todoCompleteClick
+    );
+
+    todoItemTopEl.appendChild(completeBtnEl);
+
+    const todoTitleEl = document.createElement("div");
+    todoTitleEl.classList.add("todo-title-div");
+    todoTitleEl.textContent = todo.title;
+    todoItemTopEl.appendChild(todoTitleEl);
+
+    const todoEditBtnEl = this.createButtonElement(
+      "edit-btn",
+      todo.id,
+      "Edit",
+      handlers.todoEditClick
+    );
+    todoItemTopEl.appendChild(todoEditBtnEl);
+
+    const todoDelBtnEl = this.createButtonElement(
+      "delete-btn",
+      todo.id,
+      "Delete",
+      handlers.todoDelClick
+    );
+    todoItemTopEl.appendChild(todoDelBtnEl);
+
+    todoItemULEl.appendChild(todoItemTopEl);
+    /* Todo Item Bottom */
+    const todoItemBottomEl = document.createElement("li");
+    todoItemBottomEl.classList.add("todo-bottom");
+
+    const todoDueDateEl = document.createElement("div");
+    todoDueDateEl.classList.add("todo-due-date");
+    // TODO: formate date
+    todoDueDateEl.textContent = todo.dueDate;
+    todoItemBottomEl.appendChild(todoDueDateEl);
+
+    const todoPriorityEl = document.createElement("div");
+    todoPriorityEl.classList.add(
+      "todo-priority",
+      "priority",
+      `${todo.priority}-priority`
+    );
+    todoPriorityEl.textContent = todo.priority;
+    todoItemBottomEl.appendChild(todoPriorityEl);
+
+    todoItemULEl.appendChild(todoItemBottomEl);
+    todoListItemEl.appendChild(todoItemULEl);
+    todoListULEl.appendChild(todoListItemEl);
+  }
+
   displayAddProjectPopup(handleProjectFormSubmit) {
     document.body.insertAdjacentHTML("beforeend", getPopup("project", "add"));
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleProjectFormSubmit);
     document.querySelector("#project").showModal();
+  }
+
+  displayAddTodoPopup(handleTodoFormSubmit) {
+    document.body.insertAdjacentHTML("beforeend", getPopup("todo", "add"));
+    document
+      .querySelector(".popup-form")
+      .addEventListener("submit", handleTodoFormSubmit);
+    document.querySelector("#todo").showModal();
   }
 
   displayEditProjectPopup(handleProjectFormSubmit, data) {
