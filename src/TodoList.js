@@ -40,8 +40,8 @@ export class TodoList {
     this.todos.set(todo.getId(), todo);
     Storage.saveTodos(this.todos);
 
-    //adds new todo's id to default project's todos arr
-    this.projects.get(this.defaultId).addTodo(todo.getId());
+    //adds new todo's id to project's todos arr
+    this.projects.get(newTodo.projectId).addTodo(todo.getId());
     Storage.saveProjects(this.projects);
 
     return todo.getId();
@@ -61,6 +61,7 @@ export class TodoList {
 
   editTodo(update) {
     const updatedTodo = this.todos.get(update.id);
+
     if (updatedTodo.getProjectId() !== update.projectId) {
       this.projects.get(update.projectId).addTodo(update.id);
       this.projects.get(updatedTodo.getProjectId()).removeTodo(update.id);

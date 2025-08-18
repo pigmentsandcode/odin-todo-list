@@ -1,3 +1,5 @@
+const { format } = require("date-fns");
+
 export function getPopup(popupType, data = {}, popupAction = "") {
   const generalType =
     popupType === "project" || popupType === "todo" ? popupType : "confirm";
@@ -20,17 +22,36 @@ export function getPopup(popupType, data = {}, popupAction = "") {
 }
 
 function getTodoForm(action, data) {
+  const projectsHTML = [];
+  const todoInfo = data.currTodo ? data.currTodo : {};
+  const currProjectID = data.currProject;
+  data.projectTitles.forEach((project) => {
+    const optionStr = `<option value="${project.id}" ${
+      project.id === currProjectID ? "selected" : ""
+    }>${project.title}</option>`;
+    projectsHTML.push(optionStr);
+  });
+  let dueDate = "";
+  if (action === "edit") {
+    const dataDate = new Date(todoInfo.dueDate);
+    dueDate = format(dataDate, "yyyy-MM-dd");
+  }
+  if (action === "edit") {
+    console.log("This is the todoID: " + data.todoID);
+    console.log("todoInfo todoid: " + todoInfo.id);
+  }
+
   return `
         <form action="#" class="popup-form" autocomplete="off" data-id="${
           action === "edit" ? data.todoID : ""
-        }">
+        }" data-project="${currProjectID}">
           <div class="popup-input-title popup-input-area">
             <input
               class="popup-input"
               type="text"
               id="mainTitle"
               name="mainTitle"
-              value="${data.currTitle ? data.currTitle : ""}"
+              value="${todoInfo.title ? todoInfo.title : ""}"
               required
             />
             <label for="mainTitle"><span>Title</span></label>
@@ -40,25 +61,39 @@ function getTodoForm(action, data) {
               name="description"
               id="description"
               class="popup-input"
-              value="${data.currDescript ? data.currDescript : ""}"
+              value="${todoInfo.description ? todoInfo.description : ""}"
             ></textarea>
             <label for="description"><span>Description</span></label>
           </div>
           <div class="popup-input-area popup-input-project">
             <select name="project" id="project">
-              <option value="default">Default</option>
+              ${projectsHTML.join("")}
             </select>
             <label for="project"><span>Project</span></label>
           </div>
           <div class="popup-input-area popup-input-date">
-            <input type="date" class="popup-input" id="dueDate" name="dueDate" />
+            <input type="date" class="popup-input" id="dueDate" name="dueDate" value="${
+              action === "edit" ? dueDate : ""
+            }" />
             <label for="dueDate"><span>Due Date</span></label>
           </div>
           <div class="popup-input-area popup-input-priority">
             <select name="priority" id="priority">
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="low" ${
+                todoInfo.priority && todoInfo.priority === "low"
+                  ? "selected"
+                  : ""
+              }>Low</option>
+              <option value="medium"  ${
+                todoInfo.priority && todoInfo.priority === "medium"
+                  ? "selected"
+                  : ""
+              }>Medium</option>
+              <option value="high"  ${
+                todoInfo.priority && todoInfo.priority === "high"
+                  ? "selected"
+                  : ""
+              }>High</option>
             </select>
           </div>
           <button class="popup-btn btn" type="submit">Save Todo</button>

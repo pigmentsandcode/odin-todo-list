@@ -4,6 +4,7 @@ import { UIController } from "./UIController";
 
 const newTodoList = new TodoList();
 const uiController = new UIController();
+let currentPageID = "";
 
 function handleProjectEditClick(e) {
   const projectID = e.target.dataset.id;
@@ -46,6 +47,7 @@ function handleTodoFormSubmit(e) {
   const priority = data.get("priority");
   let todoID = e.target.dataset.id;
   if (todoID === "") {
+    //adding todo
     todoID = newTodoList.createTodo({
       title: title,
       description: description,
@@ -53,28 +55,49 @@ function handleTodoFormSubmit(e) {
       priority: priority,
       projectId: project,
     });
+
+    const handlers = {
+      todoCompleteClick: handleTodoCompleteClick,
+      todoEditClick: handleTodoEditClick,
+      todoDelClick: handleTodoDelClick,
+    };
+
+    uiController.addNewTodoToProjectPage(
+      newTodoList.getTodoInfo(todoID),
+      handlers
+    );
   } else {
-    newTodoList.editTodo(todoID, title);
+    //editing todo
+    const editTodo = {
+      id: todoID,
+      projectId: project,
+      title: title,
+      description: description,
+      dueDate: dueDate,
+      priority: priority,
+      status: "incomplete",
+    };
+    newTodoList.editTodo(editTodo);
+    const currentProjectID = e.target.dataset.project;
+    //if project is same
+    if (project === currentProjectID) {
+      uiController.updateTodoItem(editTodo);
+    } else {
+      //if project is changed
+      uiController.removeTodoItem(editTodo.id);
+    }
   }
 
   uiController.closePopup("todo", handleTodoFormSubmit);
-  console.log("completed handle todo form submit");
-
-  const handlers = {
-    todoCompleteClick: handleTodoCompleteClick,
-    todoEditClick: handleTodoEditClick,
-    todoDelClick: handleTodoDelClick,
-  };
-  //uiController.displayProjectPage(projectID, title, handlers, todos);
-  uiController.addNewTodoToProjectPage(
-    newTodoList.getTodoInfo(todoID),
-    handlers
-  );
 }
 
 function handleAddTodoClick(e) {
   console.log("Handle add todo click: " + e.target.dataset.id);
-  uiController.displayAddTodoPopup(handleTodoFormSubmit);
+  const projectsList = newTodoList.getProjectTitles();
+  uiController.displayAddTodoPopup(handleTodoFormSubmit, {
+    currProject: e.target.dataset.project,
+    projectTitles: projectsList,
+  });
 }
 
 function handleTodoCompleteClick(e) {
@@ -83,6 +106,15 @@ function handleTodoCompleteClick(e) {
 
 function handleTodoEditClick(e) {
   console.log("Handle Todo Edit Click for: " + e.target.dataset.id);
+  const todoID = e.target.dataset.id;
+  const currTodo = newTodoList.getTodoInfo(todoID);
+  const projectsList = newTodoList.getProjectTitles();
+  uiController.displayEditTodoPopup(handleTodoFormSubmit, {
+    todoID: todoID,
+    currTodo: currTodo,
+    currProject: e.target.dataset.project,
+    projectTitles: projectsList,
+  });
 }
 
 function handleTodoDelClick(e) {

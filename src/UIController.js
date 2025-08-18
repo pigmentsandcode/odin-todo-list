@@ -86,6 +86,7 @@ export class UIController {
       "Add Todo",
       handlers.addTodoClick
     );
+    addTodoBtnEl.setAttribute("data-project", projectID);
 
     addTodoDivEl.appendChild(addTodoBtnEl);
     mainContentEl.appendChild(addTodoDivEl);
@@ -124,6 +125,7 @@ export class UIController {
         "Edit",
         handlers.todoEditClick
       );
+      todoEditBtnEl.setAttribute("data-project", projectID);
       todoItemTopEl.appendChild(todoEditBtnEl);
 
       const todoDelBtnEl = this.createButtonElement(
@@ -193,6 +195,7 @@ export class UIController {
       "Edit",
       handlers.todoEditClick
     );
+    todoEditBtnEl.setAttribute("data-project", todo.projectId);
     todoItemTopEl.appendChild(todoEditBtnEl);
 
     const todoDelBtnEl = this.createButtonElement(
@@ -228,16 +231,39 @@ export class UIController {
     todoListULEl.appendChild(todoListItemEl);
   }
 
+  updateTodoItem(todo) {
+    const todoListItemEl = document.querySelector(`li[data-id="${todo.id}"]`);
+    todoListItemEl.querySelector(".todo-title-div").textContent = todo.title;
+    todoListItemEl.querySelector(".todo-due-date").textContent = todo.dueDate;
+    const priorityEl = todoListItemEl.querySelector(".todo-priority");
+    if (todo.priority !== priorityEl.textContent) {
+      priorityEl.classList.remove(`${priorityEl.textContent}-priority`);
+      priorityEl.classList.add(`${todo.priority}-priority`);
+      priorityEl.textContent = todo.priority;
+    }
+  }
+
+  removeTodoItem(todoID) {
+    const todoListItemEl = document.querySelector(`li[data-id="${todoID}"]`);
+    todoListItemEl.remove();
+  }
+
   displayAddProjectPopup(handleProjectFormSubmit) {
-    document.body.insertAdjacentHTML("beforeend", getPopup("project", "add"));
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("project", {}, "add")
+    );
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleProjectFormSubmit);
     document.querySelector("#project").showModal();
   }
 
-  displayAddTodoPopup(handleTodoFormSubmit) {
-    document.body.insertAdjacentHTML("beforeend", getPopup("todo", "add"));
+  displayAddTodoPopup(handleTodoFormSubmit, data) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("todo", data, "add")
+    );
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleTodoFormSubmit);
@@ -247,12 +273,23 @@ export class UIController {
   displayEditProjectPopup(handleProjectFormSubmit, data) {
     document.body.insertAdjacentHTML(
       "beforeend",
-      getPopup("project", "edit", data)
+      getPopup("project", data, "edit")
     );
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleProjectFormSubmit);
     document.querySelector("#project").showModal();
+  }
+
+  displayEditTodoPopup(handleTodoFormSubmit, data) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("todo", data, "edit")
+    );
+    document
+      .querySelector(".popup-form")
+      .addEventListener("submit", handleTodoFormSubmit);
+    document.querySelector("#todo").showModal();
   }
 
   displayDelProjConfirmPopup(handlers, projectID) {
