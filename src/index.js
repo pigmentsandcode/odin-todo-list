@@ -47,7 +47,6 @@ function handleTodoFormSubmit(e) {
   const priority = data.get("priority");
   let todoID = e.target.dataset.id;
   if (todoID === "") {
-    //adding todo
     todoID = newTodoList.createTodo({
       title: title,
       description: description,
@@ -67,7 +66,6 @@ function handleTodoFormSubmit(e) {
       handlers
     );
   } else {
-    //editing todo
     const editTodo = {
       id: todoID,
       projectId: project,

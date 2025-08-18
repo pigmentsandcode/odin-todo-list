@@ -72,7 +72,7 @@ function getTodoForm(action, data) {
             <label for="project"><span>Project</span></label>
           </div>
           <div class="popup-input-area popup-input-date">
-            <input type="date" class="popup-input" id="dueDate" name="dueDate" value="${
+            <input type="date" class="popup-input" id="dueDate" name="dueDate" required value="${
               action === "edit" ? dueDate : ""
             }" />
             <label for="dueDate"><span>Due Date</span></label>
