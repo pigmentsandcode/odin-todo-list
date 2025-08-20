@@ -71,6 +71,13 @@ export class TodoList {
     Storage.saveTodos(this.todos);
   }
 
+  editTodoStatus(todoId) {
+    const updatedTodo = this.todos.get(todoId);
+    updatedTodo.setStatus();
+    Storage.saveTodos(this.todos);
+    return updatedTodo.getTodo();
+  }
+
   editProjectTitle(projectId, newTitle) {
     this.projects.get(projectId).setTitle(newTitle);
     Storage.saveProjects(this.projects);

@@ -100,6 +100,10 @@ function handleAddTodoClick(e) {
 
 function handleTodoCompleteClick(e) {
   console.log("Handle Todo Complete Click for: " + e.target.dataset.id);
+  const todoID = e.target.dataset.id;
+  const updatedTodo = newTodoList.editTodoStatus(todoID);
+
+  uiController.updateTodoStatus(updatedTodo);
 }
 
 function handleTodoEditClick(e) {
@@ -123,6 +127,9 @@ function handleNavProjectClick(e) {
   const projectID = e.target.dataset.id;
   const projectTitle = newTodoList.getProjectTitle(projectID);
   const todos = newTodoList.getProjectTodos(projectID);
+  const completedTodos = todos.filter((todo) => todo.status === "completed");
+  console.log("completed todos: " + completedTodos);
+  const incompleteTodos = todos.filter((todo) => todo.status === "incomplete");
   const handlers = {
     projectEditClick: handleProjectEditClick,
     projectDelClick: handleProjectDelClick,
@@ -131,7 +138,13 @@ function handleNavProjectClick(e) {
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
   };
-  uiController.displayProjectPage(projectID, projectTitle, handlers, todos);
+  uiController.displayProjectPage(
+    projectID,
+    projectTitle,
+    handlers,
+    incompleteTodos,
+    completedTodos
+  );
 }
 
 function handleProjectFormSubmit(e) {
@@ -160,7 +173,7 @@ function handleProjectFormSubmit(e) {
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
   };
-  uiController.displayProjectPage(projectID, title, handlers, todos);
+  uiController.displayProjectPage(projectID, title, handlers, todos, []);
 }
 
 function handleAddProjectClick(e) {
@@ -177,11 +190,19 @@ function loadDefaultProjectPage() {
   const defaultProjectID = newTodoList.getDefaultId();
   const defaultProjectTitle = newTodoList.getProjectTitle(defaultProjectID);
   const defaultTodos = newTodoList.getProjectTodos(defaultProjectID);
+  const completedTodos = defaultTodos.filter(
+    (todo) => todo.status === "completed"
+  );
+  console.log("completed todos: " + completedTodos);
+  const incompleteTodos = defaultTodos.filter(
+    (todo) => todo.status === "incomplete"
+  );
   uiController.displayProjectPage(
     defaultProjectID,
     defaultProjectTitle,
     handlers,
-    defaultTodos
+    incompleteTodos,
+    completedTodos
   );
 }
 

@@ -21,6 +21,10 @@ export class Todo {
     this.projectId = newProjectId;
   }
 
+  setStatus() {
+    this.status = this.status === "incomplete" ? "completed" : "incomplete";
+  }
+
   getTodo() {
     return {
       id: this.id,
