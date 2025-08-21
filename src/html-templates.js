@@ -2,11 +2,15 @@ const { format } = require("date-fns");
 
 export function getPopup(popupType, data = {}, popupAction = "") {
   const generalType =
-    popupType === "project" || popupType === "todo" ? popupType : "confirm";
+    popupType === "project" || popupType === "todo" || popupType === "view"
+      ? popupType
+      : "confirm";
   const popupHTMLFunc = popupTypes[generalType];
   let popupHTML = "";
   if (popupType === "project" || popupType === "todo") {
     popupHTML = popupHTMLFunc(popupAction, data);
+  } else if (popupType === "view") {
+    popupHTML = popupHTMLFunc(data);
   } else {
     popupHTML = popupHTMLFunc(popupType, data.id);
   }
@@ -35,10 +39,6 @@ function getTodoForm(action, data) {
   if (action === "edit") {
     const dataDate = new Date(todoInfo.dueDate);
     dueDate = format(dataDate, "yyyy-MM-dd");
-  }
-  if (action === "edit") {
-    console.log("This is the todoID: " + data.todoID);
-    console.log("todoInfo todoid: " + todoInfo.id);
   }
 
   return `
@@ -121,6 +121,41 @@ function getProjectForm(action, data) {
     `;
 }
 
+function getViewTodo(data) {
+  const todoInfo = data.todo;
+  const dueDate = format(new Date(todoInfo.dueDate), "MMM do, yyyy");
+  return `
+    <div class="title-div">
+      <button class="complete-btn" data-id="${todoInfo.id}">${
+    todoInfo.status === "completed" ? "uncheck" : "check"
+  }</button>
+      <h2 class="view-title">${todoInfo.title}</h2>
+    </div>
+    <div class="view-todo-info">
+      <ul class="view-info-ul">
+        <li>
+          <p class="todo-description">${todoInfo.description}</p>
+        </li>
+        <li>
+          Due: <span class="todo-due-date">${dueDate}</span>
+        </li>
+        <li>
+          Priority: <span class="todo-priority priority ${
+            todoInfo.priority
+          }-priority">${todoInfo.priority}</span>
+        </li>
+        <li>
+          Project: <span class="todo-project">${data.projectTitle}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="view-todo-btns">
+      <button class="edit-btn" data-id="${todoInfo.id}">Edit</button>
+      <button class="close-btn">Close</button>
+    </div>  
+  `;
+}
+
 function getConfirmPopup(popupType, targetID) {
   return `<div class="popup-body">
     <p class="popup-text">${confirmTexts[popupType].confirmText}</p>
@@ -157,4 +192,5 @@ const popupTypes = {
   project: getProjectForm,
   todo: getTodoForm,
   confirm: getConfirmPopup,
+  view: getViewTodo,
 };

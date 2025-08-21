@@ -111,6 +111,40 @@ nav {
   align-items: center;
 }
 
+/*  View Todo Popup */
+.view-popup {
+  width: 40vw;
+  height: 40vh;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-div {
+  display: flex;
+  gap: 1rem;
+}
+
+.view-title {
+  font-size: 2rem;
+}
+
+.view-popup .complete-btn {
+  width: fit-content;
+  height: fit-content;
+  align-self: center;
+}
+
+.view-todo-info {
+  margin-top: 1rem;
+}
+
+.view-info-ul li {
+  margin: 0.5rem 0;
+}
+
 .priority {
   border-radius: 15%;
   padding: 0.4rem;

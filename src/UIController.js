@@ -33,7 +33,9 @@ export class UIController {
 
     const todoTitleEl = document.createElement("div");
     todoTitleEl.classList.add("todo-title-div");
+    todoTitleEl.setAttribute("data-id", todo.id);
     todoTitleEl.textContent = todo.title;
+    todoTitleEl.addEventListener("click", handlers.viewTodoClick);
     todoItemTopEl.appendChild(todoTitleEl);
 
     const todoEditBtnEl = this.createButtonElement(
@@ -210,7 +212,9 @@ export class UIController {
 
         const todoTitleEl = document.createElement("div");
         todoTitleEl.classList.add("todo-title-div", "complete-title");
+        todoTitleEl.setAttribute("data-id", todo.id);
         todoTitleEl.textContent = todo.title;
+        todoTitleEl.addEventListener("click", handlers.viewTodoClick);
         todoItemTopEl.appendChild(todoTitleEl);
 
         const todoEditBtnEl = this.createButtonElement(
@@ -362,6 +366,33 @@ export class UIController {
       .querySelector(".popup-form")
       .addEventListener("submit", handleTodoFormSubmit);
     document.querySelector("#todo").showModal();
+  }
+
+  displayViewTodoPopup(viewTodo, projectTitle, handlers) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("view", {
+        todo: viewTodo,
+        projectTitle: projectTitle,
+      })
+    );
+    document
+      .querySelector(".edit-btn")
+      .addEventListener("click", handlers.todoEditClick);
+    document
+      .querySelector(".complete-btn")
+      .addEventListener("click", handlers.todoCompleteClick);
+    document.querySelector(".close-btn").addEventListener("click", () => {
+      document
+        .querySelector(".edit-btn")
+        .removeEventListener("click", handlers.todoEditClick);
+      document
+        .querySelector(".complete-btn")
+        .removeEventListener("click", handlers.todoCompleteClick);
+      document.querySelector("#view").close();
+      document.querySelector("#view").remove();
+    });
+    document.querySelector("#view").showModal();
   }
 
   displayDelProjConfirmPopup(handlers, projectID) {

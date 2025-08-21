@@ -59,6 +59,7 @@ function handleTodoFormSubmit(e) {
       todoCompleteClick: handleTodoCompleteClick,
       todoEditClick: handleTodoEditClick,
       todoDelClick: handleTodoDelClick,
+      viewTodoClick: handleViewTodoClick,
     };
 
     uiController.addNewTodoToProjectPage(
@@ -123,6 +124,17 @@ function handleTodoDelClick(e) {
   console.log("Handle Todo Delete Click for: " + e.target.dataset.id);
 }
 
+function handleViewTodoClick(e) {
+  console.log("Handle View Todo CLick: " + e.target.dataset.id);
+  const todoID = e.target.dataset.id;
+  const viewTodo = newTodoList.getTodoInfo(todoID);
+  const projectTitle = newTodoList.getProjectTitle(viewTodo.projectId);
+  uiController.displayViewTodoPopup(viewTodo, projectTitle, {
+    todoCompleteClick: handleTodoCompleteClick,
+    todoEditClick: handleTodoEditClick,
+  });
+}
+
 function handleNavProjectClick(e) {
   const projectID = e.target.dataset.id;
   const projectTitle = newTodoList.getProjectTitle(projectID);
@@ -137,6 +149,7 @@ function handleNavProjectClick(e) {
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
+    viewTodoClick: handleViewTodoClick,
   };
   uiController.displayProjectPage(
     projectID,
@@ -172,6 +185,7 @@ function handleProjectFormSubmit(e) {
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
+    viewTodoClick: handleViewTodoClick,
   };
   uiController.displayProjectPage(projectID, title, handlers, todos, []);
 }
@@ -186,6 +200,7 @@ function loadDefaultProjectPage() {
     todoCompleteClick: handleTodoCompleteClick,
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
+    viewTodoClick: handleViewTodoClick,
   };
   const defaultProjectID = newTodoList.getDefaultId();
   const defaultProjectTitle = newTodoList.getProjectTitle(defaultProjectID);
