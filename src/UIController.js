@@ -317,6 +317,13 @@ export class UIController {
       const mainTodoListULEl = document.querySelector(".main-todo-list");
       mainTodoListULEl.append(todoItemEl);
     }
+
+    if (document.querySelector("#view")) {
+      const viewCompleteBtn = document.querySelector("#view .complete-btn");
+      todo.status === "completed"
+        ? (viewCompleteBtn.textContent = "uncheck")
+        : (viewCompleteBtn.textContent = "check");
+    }
   }
 
   removeTodoItem(todoID) {
@@ -377,20 +384,28 @@ export class UIController {
       })
     );
     document
-      .querySelector(".edit-btn")
+      .querySelector("#view .edit-btn")
       .addEventListener("click", handlers.todoEditClick);
     document
-      .querySelector(".complete-btn")
+      .querySelector("#view .complete-btn")
       .addEventListener("click", handlers.todoCompleteClick);
+    const elementListeners = [
+      {
+        selector: "#view .edit-btn",
+        type: "click",
+        handler: handlers.todoEditClick,
+      },
+      {
+        selector: "#view .complete-btn",
+        type: "click",
+        handler: handlers.todoCompleteClick,
+      },
+    ];
     document.querySelector(".close-btn").addEventListener("click", () => {
-      document
-        .querySelector(".edit-btn")
-        .removeEventListener("click", handlers.todoEditClick);
-      document
-        .querySelector(".complete-btn")
-        .removeEventListener("click", handlers.todoCompleteClick);
-      document.querySelector("#view").close();
-      document.querySelector("#view").remove();
+      this.handleExitPopup("view", elementListeners);
+    });
+    document.querySelector(".popup-exit").addEventListener("click", () => {
+      this.handleExitPopup("view", elementListeners);
     });
     document.querySelector("#view").showModal();
   }
@@ -419,6 +434,16 @@ export class UIController {
     document
       .querySelector("#confirm-btn")
       .removeEventListener("click", handlers.handleDelProjConfirm);
+    document.querySelector(`#${popupID}`).close();
+    document.querySelector(`#${popupID}`).remove();
+  }
+
+  handleExitPopup(popupID, listenerEls) {
+    listenerEls.forEach((elementListener) => {
+      document
+        .querySelector(elementListener.selector)
+        .removeEventListener(elementListener.type, elementListener.handler);
+    });
     document.querySelector(`#${popupID}`).close();
     document.querySelector(`#${popupID}`).remove();
   }
