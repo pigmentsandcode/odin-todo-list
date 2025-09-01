@@ -339,6 +339,17 @@ export class UIController {
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleProjectFormSubmit);
+    document.querySelector(".popup-exit").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector(".popup-form")
+          .removeEventListener("submit", handleProjectFormSubmit);
+        document.querySelector("#project").close();
+        document.querySelector("#project").remove();
+      },
+      { once: true }
+    );
     document.querySelector("#project").showModal();
   }
 
@@ -350,6 +361,17 @@ export class UIController {
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleTodoFormSubmit);
+    document.querySelector(".popup-exit").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector(".popup-form")
+          .removeEventListener("submit", handleTodoFormSubmit);
+        document.querySelector("#todo").close();
+        document.querySelector("#todo").remove();
+      },
+      { once: true }
+    );
     document.querySelector("#todo").showModal();
   }
 
@@ -361,6 +383,17 @@ export class UIController {
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleProjectFormSubmit);
+    document.querySelector(".popup-exit").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector(".popup-form")
+          .removeEventListener("submit", handleProjectFormSubmit);
+        document.querySelector("#project").close();
+        document.querySelector("#project").remove();
+      },
+      { once: true }
+    );
     document.querySelector("#project").showModal();
   }
 
@@ -372,6 +405,17 @@ export class UIController {
     document
       .querySelector(".popup-form")
       .addEventListener("submit", handleTodoFormSubmit);
+    document.querySelector(".popup-exit").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector(".popup-form")
+          .removeEventListener("submit", handleTodoFormSubmit);
+        document.querySelector("#todo").close();
+        document.querySelector("#todo").remove();
+      },
+      { once: true }
+    );
     document.querySelector("#todo").showModal();
   }
 
@@ -411,7 +455,6 @@ export class UIController {
   }
 
   displayDelProjConfirmPopup(handlers, projectID) {
-    console.log("inside display popup " + projectID);
     document.body.insertAdjacentHTML(
       "beforeend",
       getPopup("deleteProject", { id: projectID })
@@ -419,6 +462,39 @@ export class UIController {
     document
       .querySelector("#confirm-btn")
       .addEventListener("click", handlers.handleDelProjConfirm);
+    document.querySelector("#cancel-btn").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector("#confirm-btn")
+          .removeEventListener("click", handlers.handleDelProjConfirm);
+        document.querySelector("#confirm").close();
+        document.querySelector("#confirm").remove();
+      },
+      { once: true }
+    );
+    document.querySelector("#confirm").showModal();
+  }
+
+  displayDelTodoConfirmPopup(handlers, todoID) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("deleteTodo", { id: todoID })
+    );
+    document
+      .querySelector("#confirm-btn")
+      .addEventListener("click", handlers.handleDelTodoConfirm);
+    document.querySelector("#cancel-btn").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector("#confirm-btn")
+          .removeEventListener("click", handlers.handleDelTodoConfirm);
+        document.querySelector("#confirm").close();
+        document.querySelector("#confirm").remove();
+      },
+      { once: true }
+    );
     document.querySelector("#confirm").showModal();
   }
 

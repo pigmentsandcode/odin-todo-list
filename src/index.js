@@ -122,6 +122,22 @@ function handleTodoEditClick(e) {
 
 function handleTodoDelClick(e) {
   console.log("Handle Todo Delete Click for: " + e.target.dataset.id);
+  const todoID = e.target.dataset.id;
+  uiController.displayDelTodoConfirmPopup(
+    {
+      handleDelTodoConfirm: handleDelTodoConfirmClick,
+    },
+    todoID
+  );
+}
+
+function handleDelTodoConfirmClick(e) {
+  const delTodoID = e.target.dataset.id;
+  newTodoList.deleteTodo(delTodoID);
+  uiController.closeConfirmPopup("confirm", {
+    handleDelTodoConfirm: handleDelTodoConfirmClick,
+  });
+  uiController.removeTodoItem(delTodoID);
 }
 
 function handleViewTodoClick(e) {
