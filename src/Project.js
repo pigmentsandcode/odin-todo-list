@@ -24,9 +24,13 @@ export class Project {
 
   removeTodo(todoId) {
     const removeIndex = this.todos.findIndex((todo) => {
-      todo === todoId;
+      return todo === todoId;
     });
-    this.todos.splice(removeIndex, 1);
+    if (removeIndex >= 0) {
+      this.todos.splice(removeIndex, 1);
+    } else {
+      console.log("error removing todo id: " + todoId);
+    }
   }
 
   getProjectTodos() {

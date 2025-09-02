@@ -152,8 +152,8 @@ export class UIController {
     mainContentEl.appendChild(projectTitleDiv);
 
     /*  Add Todo Button */
-    const addTodoDivEl = document.createElement("div");
-    addTodoDivEl.classList = "add-todo-div";
+    const projectBtnsDivEl = document.createElement("div");
+    projectBtnsDivEl.classList = "project-btns-div";
     const addTodoBtnEl = this.createButtonElement(
       "add-todo-btn",
       "addTodoBtn",
@@ -161,9 +161,19 @@ export class UIController {
       handlers.addTodoClick
     );
     addTodoBtnEl.setAttribute("data-project", projectID);
+    projectBtnsDivEl.appendChild(addTodoBtnEl);
+    if (projectTitleText !== "Default") {
+      const clearProjectTodosBtnEl = this.createButtonElement(
+        "clear-todos-btn",
+        "clearTodosBtn",
+        "Clear Project Todos",
+        handlers.clearProjTodosClick
+      );
+      clearProjectTodosBtnEl.setAttribute("data-project", projectID);
+      projectBtnsDivEl.appendChild(clearProjectTodosBtnEl);
+    }
 
-    addTodoDivEl.appendChild(addTodoBtnEl);
-    mainContentEl.appendChild(addTodoDivEl);
+    mainContentEl.appendChild(projectBtnsDivEl);
 
     /*  Project Todos List */
     const todoListULEl = document.createElement("ul");
@@ -329,6 +339,15 @@ export class UIController {
   removeTodoItem(todoID) {
     const todoListItemEl = document.querySelector(`li[data-id="${todoID}"]`);
     todoListItemEl.remove();
+  }
+
+  clearProjectTodoItems() {
+    document.querySelectorAll(".todo-list").forEach((listEl) => {
+      listEl.remove();
+    });
+    if (document.querySelector("hr")) {
+      document.querySelector("hr").remove();
+    }
   }
 
   displayAddProjectPopup(handleProjectFormSubmit) {
@@ -498,6 +517,28 @@ export class UIController {
     document.querySelector("#confirm").showModal();
   }
 
+  displayClearTodosPopup(projectID, handlers) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("clearProjectTodos", { id: projectID })
+    );
+    document
+      .querySelector("#confirm-btn")
+      .addEventListener("click", handlers.handleClearTodosConfirm);
+    document.querySelector("#cancel-btn").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector("#confirm-btn")
+          .removeEventListener("click", handlers.handleClearTodosConfirm);
+        document.querySelector("#confirm").close();
+        document.querySelector("#confirm").remove();
+      },
+      { once: true }
+    );
+    document.querySelector("#confirm").showModal();
+  }
+
   closePopup(popupId, handleProjectFormSubmit) {
     document
       .querySelector(".popup-form")
@@ -509,7 +550,7 @@ export class UIController {
   closeConfirmPopup(popupID, handlers) {
     document
       .querySelector("#confirm-btn")
-      .removeEventListener("click", handlers.handleDelProjConfirm);
+      .removeEventListener("click", handlers.handleConfirm);
     document.querySelector(`#${popupID}`).close();
     document.querySelector(`#${popupID}`).remove();
   }

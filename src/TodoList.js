@@ -159,9 +159,9 @@ export class TodoList {
   clearProjectTodos(projectId) {
     const moveTodosIds = this.projects.get(projectId).getProjectTodos();
     this.moveTodos(moveTodosIds, this.defaultId, projectId);
-    this.projects.get(projectId).clearProjectTodos();
+    this.projects.get(projectId).clearTodos();
     Storage.saveTodos(this.todos);
-    Storage.saveProjects(this.todos);
+    Storage.saveProjects(this.projects);
   }
 
   moveTodos(moveTodosIds, newProjectId, oldProjectId) {

@@ -29,7 +29,7 @@ function handleDelProjConfirmClick(e) {
   newTodoList.deleteProject(e.target.dataset.id);
   loadDefaultProjectPage();
   uiController.closeConfirmPopup("confirm", {
-    handleDelProjConfirm: handleDelProjConfirmClick,
+    handleConfirm: handleDelProjConfirmClick,
   });
   uiController.populateSidebar(
     newTodoList.getProjects(),
@@ -135,7 +135,7 @@ function handleDelTodoConfirmClick(e) {
   const delTodoID = e.target.dataset.id;
   newTodoList.deleteTodo(delTodoID);
   uiController.closeConfirmPopup("confirm", {
-    handleDelTodoConfirm: handleDelTodoConfirmClick,
+    handleConfirm: handleDelTodoConfirmClick,
   });
   uiController.removeTodoItem(delTodoID);
 }
@@ -166,6 +166,7 @@ function handleNavProjectClick(e) {
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
     viewTodoClick: handleViewTodoClick,
+    clearProjTodosClick: handleClearProjTodosClick,
   };
   uiController.displayProjectPage(
     projectID,
@@ -202,12 +203,31 @@ function handleProjectFormSubmit(e) {
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
     viewTodoClick: handleViewTodoClick,
+    clearProjTodosClick: handleClearProjTodosClick,
   };
   uiController.displayProjectPage(projectID, title, handlers, todos, []);
 }
 
 function handleAddProjectClick(e) {
   uiController.displayAddProjectPopup(handleProjectFormSubmit);
+}
+
+function handleClearTodosConfirmClick(e) {
+  const projectID = e.target.dataset.id;
+  console.log("projectID clear: " + projectID);
+  newTodoList.clearProjectTodos(projectID);
+
+  uiController.closeConfirmPopup("confirm", {
+    handleConfirm: handleClearTodosConfirmClick,
+  });
+  uiController.clearProjectTodoItems();
+}
+
+function handleClearProjTodosClick(e) {
+  console.log("handle clear project todos click: " + e.target.dataset.project);
+  uiController.displayClearTodosPopup(e.target.dataset.project, {
+    handleClearTodosConfirm: handleClearTodosConfirmClick,
+  });
 }
 
 function loadDefaultProjectPage() {
@@ -224,7 +244,6 @@ function loadDefaultProjectPage() {
   const completedTodos = defaultTodos.filter(
     (todo) => todo.status === "completed"
   );
-  console.log("completed todos: " + completedTodos);
   const incompleteTodos = defaultTodos.filter(
     (todo) => todo.status === "incomplete"
   );
