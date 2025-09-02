@@ -34,7 +34,7 @@ export class Project {
   }
 
   getProjectTodos() {
-    return this.todos;
+    return [...this.todos];
   }
 
   getProject() {

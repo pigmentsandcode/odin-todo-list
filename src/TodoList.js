@@ -105,9 +105,12 @@ export class TodoList {
 
   deleteCompleteTodos(projectId) {
     const projectTodosIds = this.projects.get(projectId).getProjectTodos();
+    console.log("todo ids list: " + projectTodosIds.length);
     projectTodosIds.forEach((todoId) => {
+      console.log("this is todoid: " + todoId);
       const todoStatus = this.todos.get(todoId).getTodo().status;
-      if (todoStatus === "complete") {
+      console.log("Todo status: " + todoStatus);
+      if (todoStatus === "completed") {
         this.projects.get(projectId).removeTodo(todoId);
         this.todos.delete(todoId);
       }

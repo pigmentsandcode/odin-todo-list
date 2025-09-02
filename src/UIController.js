@@ -192,6 +192,20 @@ export class UIController {
 
     // Completed section
     if (completedTodos.length !== 0) {
+      const completedHeaderDivEl = document.createElement("div");
+      completedHeaderDivEl.classList.add("completed-header-div");
+      const completedTitleHeaderEl = document.createElement("h3");
+      completedTitleHeaderEl.textContent = "Completed";
+      completedHeaderDivEl.appendChild(completedTitleHeaderEl);
+
+      const deleteCompletedBtnEl = this.createButtonElement(
+        "del-complete-btn",
+        projectID,
+        "Delete Completed",
+        handlers.delCompletedClick
+      );
+      completedHeaderDivEl.appendChild(deleteCompletedBtnEl);
+      mainContentEl.appendChild(completedHeaderDivEl);
       const dividerEl = document.createElement("hr");
       mainContentEl.appendChild(dividerEl);
 
@@ -294,12 +308,26 @@ export class UIController {
     }
   }
 
-  updateTodoStatus(todo) {
+  updateTodoStatus(todo, projectID, handlers) {
     const todoItemEl = document.querySelector(`[data-id="${todo.id}"]`);
     // if in incomplete list, remove and add to completed
     if (todo.status === "completed") {
       if (!document.querySelector(".complete-todo-list")) {
         const mainContentEl = document.querySelector("#main-content");
+        const completedHeaderDivEl = document.createElement("div");
+        completedHeaderDivEl.classList.add("completed-header-div");
+        const completedTitleHeaderEl = document.createElement("h3");
+        completedTitleHeaderEl.textContent = "Completed";
+        completedHeaderDivEl.appendChild(completedTitleHeaderEl);
+
+        const deleteCompletedBtnEl = this.createButtonElement(
+          "del-complete-btn",
+          projectID,
+          "Delete Completed",
+          handlers.delCompletedClick
+        );
+        completedHeaderDivEl.appendChild(deleteCompletedBtnEl);
+        mainContentEl.appendChild(completedHeaderDivEl);
         const dividerEl = document.createElement("hr");
         mainContentEl.appendChild(dividerEl);
 
@@ -348,6 +376,12 @@ export class UIController {
     if (document.querySelector("hr")) {
       document.querySelector("hr").remove();
     }
+  }
+
+  removeCompletedTodos() {
+    document.querySelector(".complete-todo-list").remove();
+    document.querySelector("hr").remove();
+    document.querySelector(".completed-header-div").remove();
   }
 
   displayAddProjectPopup(handleProjectFormSubmit) {
@@ -531,6 +565,28 @@ export class UIController {
         document
           .querySelector("#confirm-btn")
           .removeEventListener("click", handlers.handleClearTodosConfirm);
+        document.querySelector("#confirm").close();
+        document.querySelector("#confirm").remove();
+      },
+      { once: true }
+    );
+    document.querySelector("#confirm").showModal();
+  }
+
+  displayDelCompleteConfirmPopup(projectID, handlers) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      getPopup("deleteCompleted", { id: projectID })
+    );
+    document
+      .querySelector("#confirm-btn")
+      .addEventListener("click", handlers.handleDelCompleteConfirm);
+    document.querySelector("#cancel-btn").addEventListener(
+      "click",
+      () => {
+        document
+          .querySelector("#confirm-btn")
+          .removeEventListener("click", handlers.handleDelCompleteConfirm);
         document.querySelector("#confirm").close();
         document.querySelector("#confirm").remove();
       },

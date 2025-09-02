@@ -103,8 +103,11 @@ function handleTodoCompleteClick(e) {
   console.log("Handle Todo Complete Click for: " + e.target.dataset.id);
   const todoID = e.target.dataset.id;
   const updatedTodo = newTodoList.editTodoStatus(todoID);
+  const projectID = newTodoList.getTodoInfo(todoID).project;
 
-  uiController.updateTodoStatus(updatedTodo);
+  uiController.updateTodoStatus(updatedTodo, projectID, {
+    delCompletedClick: handleDelCompletedClick,
+  });
 }
 
 function handleTodoEditClick(e) {
@@ -167,6 +170,7 @@ function handleNavProjectClick(e) {
     todoDelClick: handleTodoDelClick,
     viewTodoClick: handleViewTodoClick,
     clearProjTodosClick: handleClearProjTodosClick,
+    delCompletedClick: handleDelCompletedClick,
   };
   uiController.displayProjectPage(
     projectID,
@@ -204,6 +208,7 @@ function handleProjectFormSubmit(e) {
     todoDelClick: handleTodoDelClick,
     viewTodoClick: handleViewTodoClick,
     clearProjTodosClick: handleClearProjTodosClick,
+    delCompletedClick: handleDelCompletedClick,
   };
   uiController.displayProjectPage(projectID, title, handlers, todos, []);
 }
@@ -230,6 +235,22 @@ function handleClearProjTodosClick(e) {
   });
 }
 
+function handleDelCompleteConfirmClick(e) {
+  const projectID = e.target.dataset.id;
+  newTodoList.deleteCompleteTodos(projectID);
+  uiController.closeConfirmPopup("confirm", {
+    handleConfirm: handleDelCompleteConfirmClick,
+  });
+  uiController.removeCompletedTodos();
+}
+
+function handleDelCompletedClick(e) {
+  const projectID = e.target.dataset.id;
+  uiController.displayDelCompleteConfirmPopup(projectID, {
+    handleDelCompleteConfirm: handleDelCompleteConfirmClick,
+  });
+}
+
 function loadDefaultProjectPage() {
   const handlers = {
     addTodoClick: handleAddTodoClick,
@@ -237,6 +258,7 @@ function loadDefaultProjectPage() {
     todoEditClick: handleTodoEditClick,
     todoDelClick: handleTodoDelClick,
     viewTodoClick: handleViewTodoClick,
+    delCompletedClick: handleDelCompletedClick,
   };
   const defaultProjectID = newTodoList.getDefaultId();
   const defaultProjectTitle = newTodoList.getProjectTitle(defaultProjectID);
