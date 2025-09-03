@@ -9,7 +9,7 @@ let currentPageID = "";
 function handleProjectEditClick(e) {
   const projectID = e.target.dataset.id;
   const currTitle = newTodoList.getProjectTitle(projectID);
-  uiController.displayEditProjectPopup(handleProjectFormSubmit, {
+  uiController.displayFormPopup(handleProjectFormSubmit, "edit", "project", {
     projectID: projectID,
     currTitle: currTitle,
   });
@@ -17,11 +17,12 @@ function handleProjectEditClick(e) {
 
 function handleProjectDelClick(e) {
   const projectID = e.target.dataset.id;
-  uiController.displayDelProjConfirmPopup(
+  uiController.displayConfirmPopup(
+    projectID,
     {
-      handleDelProjConfirm: handleDelProjConfirmClick,
+      handleConfirm: handleDelProjConfirmClick,
     },
-    projectID
+    "deleteProject"
   );
 }
 
@@ -93,7 +94,7 @@ function handleTodoFormSubmit(e) {
 function handleAddTodoClick(e) {
   console.log("Handle add todo click: " + e.target.dataset.id);
   const projectsList = newTodoList.getProjectTitles();
-  uiController.displayAddTodoPopup(handleTodoFormSubmit, {
+  uiController.displayFormPopup(handleTodoFormSubmit, "add", "todo", {
     currProject: e.target.dataset.project,
     projectTitles: projectsList,
   });
@@ -103,8 +104,8 @@ function handleTodoCompleteClick(e) {
   console.log("Handle Todo Complete Click for: " + e.target.dataset.id);
   const todoID = e.target.dataset.id;
   const updatedTodo = newTodoList.editTodoStatus(todoID);
-  const projectID = newTodoList.getTodoInfo(todoID).project;
-
+  const projectID = newTodoList.getTodoInfo(todoID).projectId;
+  console.log("Project ID: " + projectID);
   uiController.updateTodoStatus(updatedTodo, projectID, {
     delCompletedClick: handleDelCompletedClick,
   });
@@ -115,7 +116,7 @@ function handleTodoEditClick(e) {
   const todoID = e.target.dataset.id;
   const currTodo = newTodoList.getTodoInfo(todoID);
   const projectsList = newTodoList.getProjectTitles();
-  uiController.displayEditTodoPopup(handleTodoFormSubmit, {
+  uiController.displayFormPopup(handleTodoFormSubmit, "edit", "todo", {
     todoID: todoID,
     currTodo: currTodo,
     currProject: e.target.dataset.project,
@@ -126,11 +127,12 @@ function handleTodoEditClick(e) {
 function handleTodoDelClick(e) {
   console.log("Handle Todo Delete Click for: " + e.target.dataset.id);
   const todoID = e.target.dataset.id;
-  uiController.displayDelTodoConfirmPopup(
+  uiController.displayConfirmPopup(
+    todoID,
     {
-      handleDelTodoConfirm: handleDelTodoConfirmClick,
+      handleConfirm: handleDelTodoConfirmClick,
     },
-    todoID
+    "deleteTodo"
   );
 }
 
@@ -140,7 +142,7 @@ function handleDelTodoConfirmClick(e) {
   uiController.closeConfirmPopup("confirm", {
     handleConfirm: handleDelTodoConfirmClick,
   });
-  uiController.removeTodoItem(delTodoID);
+  uiController.removeTodoItem(delTodoID, handleDelCompletedClick);
 }
 
 function handleViewTodoClick(e) {
@@ -214,7 +216,7 @@ function handleProjectFormSubmit(e) {
 }
 
 function handleAddProjectClick(e) {
-  uiController.displayAddProjectPopup(handleProjectFormSubmit);
+  uiController.displayFormPopup(handleProjectFormSubmit, "add", "project");
 }
 
 function handleClearTodosConfirmClick(e) {
@@ -225,14 +227,18 @@ function handleClearTodosConfirmClick(e) {
   uiController.closeConfirmPopup("confirm", {
     handleConfirm: handleClearTodosConfirmClick,
   });
-  uiController.clearProjectTodoItems();
+  uiController.clearProjectTodoItems(handleDelCompletedClick);
 }
 
 function handleClearProjTodosClick(e) {
   console.log("handle clear project todos click: " + e.target.dataset.project);
-  uiController.displayClearTodosPopup(e.target.dataset.project, {
-    handleClearTodosConfirm: handleClearTodosConfirmClick,
-  });
+  uiController.displayConfirmPopup(
+    e.target.dataset.project,
+    {
+      handleConfirm: handleClearTodosConfirmClick,
+    },
+    "clearProjectTodos"
+  );
 }
 
 function handleDelCompleteConfirmClick(e) {
@@ -246,9 +252,13 @@ function handleDelCompleteConfirmClick(e) {
 
 function handleDelCompletedClick(e) {
   const projectID = e.target.dataset.id;
-  uiController.displayDelCompleteConfirmPopup(projectID, {
-    handleDelCompleteConfirm: handleDelCompleteConfirmClick,
-  });
+  uiController.displayConfirmPopup(
+    projectID,
+    {
+      handleConfirm: handleDelCompleteConfirmClick,
+    },
+    "deleteCompleted"
+  );
 }
 
 function loadDefaultProjectPage() {

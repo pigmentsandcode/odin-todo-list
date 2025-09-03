@@ -192,29 +192,8 @@ export class UIController {
 
     // Completed section
     if (completedTodos.length !== 0) {
-      const completedHeaderDivEl = document.createElement("div");
-      completedHeaderDivEl.classList.add("completed-header-div");
-      const completedTitleHeaderEl = document.createElement("h3");
-      completedTitleHeaderEl.textContent = "Completed";
-      completedHeaderDivEl.appendChild(completedTitleHeaderEl);
-
-      const deleteCompletedBtnEl = this.createButtonElement(
-        "del-complete-btn",
-        projectID,
-        "Delete Completed",
-        handlers.delCompletedClick
-      );
-      completedHeaderDivEl.appendChild(deleteCompletedBtnEl);
-      mainContentEl.appendChild(completedHeaderDivEl);
-      const dividerEl = document.createElement("hr");
-      mainContentEl.appendChild(dividerEl);
-
-      const completeListULEl = document.createElement("ul");
-      completeListULEl.classList.add(
-        "todo-list",
-        "flex-col",
-        "complete-todo-list"
-      );
+      this.addCompletedSection(projectID, handlers);
+      const completeListULEl = document.querySelector(".complete-todo-list");
       completedTodos.forEach((todo) => {
         const todoListItemEl = document.createElement("li");
         todoListItemEl.classList.add("todo-list-item", "complete-list-item");
@@ -313,31 +292,7 @@ export class UIController {
     // if in incomplete list, remove and add to completed
     if (todo.status === "completed") {
       if (!document.querySelector(".complete-todo-list")) {
-        const mainContentEl = document.querySelector("#main-content");
-        const completedHeaderDivEl = document.createElement("div");
-        completedHeaderDivEl.classList.add("completed-header-div");
-        const completedTitleHeaderEl = document.createElement("h3");
-        completedTitleHeaderEl.textContent = "Completed";
-        completedHeaderDivEl.appendChild(completedTitleHeaderEl);
-
-        const deleteCompletedBtnEl = this.createButtonElement(
-          "del-complete-btn",
-          projectID,
-          "Delete Completed",
-          handlers.delCompletedClick
-        );
-        completedHeaderDivEl.appendChild(deleteCompletedBtnEl);
-        mainContentEl.appendChild(completedHeaderDivEl);
-        const dividerEl = document.createElement("hr");
-        mainContentEl.appendChild(dividerEl);
-
-        const completeListULEl = document.createElement("ul");
-        completeListULEl.classList.add(
-          "todo-list",
-          "flex-col",
-          "complete-todo-list"
-        );
-        mainContentEl.appendChild(completeListULEl);
+        this.addCompletedSection(projectID, handlers);
       }
       const completeListULEl = document.querySelector(".complete-todo-list");
       todoItemEl.classList.add("complete-list-item");
@@ -354,6 +309,9 @@ export class UIController {
         .classList.remove("complete-title");
       const mainTodoListULEl = document.querySelector(".main-todo-list");
       mainTodoListULEl.append(todoItemEl);
+      if (!document.querySelector(".complete-todo-list").hasChildNodes()) {
+        this.removeCompletedTodos(handlers.delCompletedClick);
+      }
     }
 
     if (document.querySelector("#view")) {
@@ -364,112 +322,56 @@ export class UIController {
     }
   }
 
-  removeTodoItem(todoID) {
+  removeTodoItem(todoID, delCompletedClick) {
     const todoListItemEl = document.querySelector(`li[data-id="${todoID}"]`);
     todoListItemEl.remove();
-  }
-
-  clearProjectTodoItems() {
-    document.querySelectorAll(".todo-list").forEach((listEl) => {
-      listEl.remove();
-    });
-    if (document.querySelector("hr")) {
-      document.querySelector("hr").remove();
+    if (!document.querySelector(".complete-todo-list").hasChildNodes()) {
+      this.removeCompletedTodos(delCompletedClick);
     }
   }
 
-  removeCompletedTodos() {
+  clearProjectTodoItems(delCompletedClick) {
+    document.querySelectorAll(".todo-list").forEach((listEl) => {
+      listEl.remove();
+    });
+    if (document.querySelector(".completed-header-div")) {
+      document
+        .querySelector(".del-complete-btn")
+        .removeEventListener("click", delCompletedClick);
+      document.querySelector("hr").remove();
+      document.querySelector(".completed-header-div").remove();
+    }
+  }
+
+  removeCompletedTodos(delCompletedClick) {
+    document
+      .querySelector(".del-complete-btn")
+      .removeEventListener("click", delCompletedClick);
     document.querySelector(".complete-todo-list").remove();
     document.querySelector("hr").remove();
     document.querySelector(".completed-header-div").remove();
   }
 
-  displayAddProjectPopup(handleProjectFormSubmit) {
+  displayFormPopup(handleFormSubmit, actionType, formType, data = {}) {
     document.body.insertAdjacentHTML(
       "beforeend",
-      getPopup("project", {}, "add")
+      getPopup(formType, data, actionType)
     );
     document
       .querySelector(".popup-form")
-      .addEventListener("submit", handleProjectFormSubmit);
+      .addEventListener("submit", handleFormSubmit);
     document.querySelector(".popup-exit").addEventListener(
       "click",
       () => {
         document
           .querySelector(".popup-form")
-          .removeEventListener("submit", handleProjectFormSubmit);
-        document.querySelector("#project").close();
-        document.querySelector("#project").remove();
+          .removeEventListener("submit", handleFormSubmit);
+        document.querySelector(`#${formType}`).close();
+        document.querySelector(`#${formType}`).remove();
       },
       { once: true }
     );
-    document.querySelector("#project").showModal();
-  }
-
-  displayAddTodoPopup(handleTodoFormSubmit, data) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      getPopup("todo", data, "add")
-    );
-    document
-      .querySelector(".popup-form")
-      .addEventListener("submit", handleTodoFormSubmit);
-    document.querySelector(".popup-exit").addEventListener(
-      "click",
-      () => {
-        document
-          .querySelector(".popup-form")
-          .removeEventListener("submit", handleTodoFormSubmit);
-        document.querySelector("#todo").close();
-        document.querySelector("#todo").remove();
-      },
-      { once: true }
-    );
-    document.querySelector("#todo").showModal();
-  }
-
-  displayEditProjectPopup(handleProjectFormSubmit, data) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      getPopup("project", data, "edit")
-    );
-    document
-      .querySelector(".popup-form")
-      .addEventListener("submit", handleProjectFormSubmit);
-    document.querySelector(".popup-exit").addEventListener(
-      "click",
-      () => {
-        document
-          .querySelector(".popup-form")
-          .removeEventListener("submit", handleProjectFormSubmit);
-        document.querySelector("#project").close();
-        document.querySelector("#project").remove();
-      },
-      { once: true }
-    );
-    document.querySelector("#project").showModal();
-  }
-
-  displayEditTodoPopup(handleTodoFormSubmit, data) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      getPopup("todo", data, "edit")
-    );
-    document
-      .querySelector(".popup-form")
-      .addEventListener("submit", handleTodoFormSubmit);
-    document.querySelector(".popup-exit").addEventListener(
-      "click",
-      () => {
-        document
-          .querySelector(".popup-form")
-          .removeEventListener("submit", handleTodoFormSubmit);
-        document.querySelector("#todo").close();
-        document.querySelector("#todo").remove();
-      },
-      { once: true }
-    );
-    document.querySelector("#todo").showModal();
+    document.querySelector(`#${formType}`).showModal();
   }
 
   displayViewTodoPopup(viewTodo, projectTitle, handlers) {
@@ -480,18 +382,11 @@ export class UIController {
         projectTitle: projectTitle,
       })
     );
-    document
-      .querySelector("#view .edit-btn")
-      .addEventListener("click", handlers.todoEditClick);
+
     document
       .querySelector("#view .complete-btn")
       .addEventListener("click", handlers.todoCompleteClick);
     const elementListeners = [
-      {
-        selector: "#view .edit-btn",
-        type: "click",
-        handler: handlers.todoEditClick,
-      },
       {
         selector: "#view .complete-btn",
         type: "click",
@@ -507,86 +402,20 @@ export class UIController {
     document.querySelector("#view").showModal();
   }
 
-  displayDelProjConfirmPopup(handlers, projectID) {
+  displayConfirmPopup(id, handlers, confirmType) {
     document.body.insertAdjacentHTML(
       "beforeend",
-      getPopup("deleteProject", { id: projectID })
+      getPopup(confirmType, { id: id })
     );
     document
       .querySelector("#confirm-btn")
-      .addEventListener("click", handlers.handleDelProjConfirm);
+      .addEventListener("click", handlers.handleConfirm);
     document.querySelector("#cancel-btn").addEventListener(
       "click",
       () => {
         document
           .querySelector("#confirm-btn")
-          .removeEventListener("click", handlers.handleDelProjConfirm);
-        document.querySelector("#confirm").close();
-        document.querySelector("#confirm").remove();
-      },
-      { once: true }
-    );
-    document.querySelector("#confirm").showModal();
-  }
-
-  displayDelTodoConfirmPopup(handlers, todoID) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      getPopup("deleteTodo", { id: todoID })
-    );
-    document
-      .querySelector("#confirm-btn")
-      .addEventListener("click", handlers.handleDelTodoConfirm);
-    document.querySelector("#cancel-btn").addEventListener(
-      "click",
-      () => {
-        document
-          .querySelector("#confirm-btn")
-          .removeEventListener("click", handlers.handleDelTodoConfirm);
-        document.querySelector("#confirm").close();
-        document.querySelector("#confirm").remove();
-      },
-      { once: true }
-    );
-    document.querySelector("#confirm").showModal();
-  }
-
-  displayClearTodosPopup(projectID, handlers) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      getPopup("clearProjectTodos", { id: projectID })
-    );
-    document
-      .querySelector("#confirm-btn")
-      .addEventListener("click", handlers.handleClearTodosConfirm);
-    document.querySelector("#cancel-btn").addEventListener(
-      "click",
-      () => {
-        document
-          .querySelector("#confirm-btn")
-          .removeEventListener("click", handlers.handleClearTodosConfirm);
-        document.querySelector("#confirm").close();
-        document.querySelector("#confirm").remove();
-      },
-      { once: true }
-    );
-    document.querySelector("#confirm").showModal();
-  }
-
-  displayDelCompleteConfirmPopup(projectID, handlers) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      getPopup("deleteCompleted", { id: projectID })
-    );
-    document
-      .querySelector("#confirm-btn")
-      .addEventListener("click", handlers.handleDelCompleteConfirm);
-    document.querySelector("#cancel-btn").addEventListener(
-      "click",
-      () => {
-        document
-          .querySelector("#confirm-btn")
-          .removeEventListener("click", handlers.handleDelCompleteConfirm);
+          .removeEventListener("click", handlers.handleConfirm);
         document.querySelector("#confirm").close();
         document.querySelector("#confirm").remove();
       },
@@ -619,5 +448,33 @@ export class UIController {
     });
     document.querySelector(`#${popupID}`).close();
     document.querySelector(`#${popupID}`).remove();
+  }
+
+  addCompletedSection(projectID, handlers) {
+    const mainContentEl = document.querySelector("#main-content");
+    const completedHeaderDivEl = document.createElement("div");
+    completedHeaderDivEl.classList.add("completed-header-div");
+    const completedTitleHeaderEl = document.createElement("h3");
+    completedTitleHeaderEl.textContent = "Completed";
+    completedHeaderDivEl.appendChild(completedTitleHeaderEl);
+
+    const deleteCompletedBtnEl = this.createButtonElement(
+      "del-complete-btn",
+      projectID,
+      "Delete Completed",
+      handlers.delCompletedClick
+    );
+    completedHeaderDivEl.appendChild(deleteCompletedBtnEl);
+    mainContentEl.appendChild(completedHeaderDivEl);
+    const dividerEl = document.createElement("hr");
+    mainContentEl.appendChild(dividerEl);
+
+    const completeListULEl = document.createElement("ul");
+    completeListULEl.classList.add(
+      "todo-list",
+      "flex-col",
+      "complete-todo-list"
+    );
+    mainContentEl.appendChild(completeListULEl);
   }
 }

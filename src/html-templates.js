@@ -150,7 +150,7 @@ function getViewTodo(data) {
       </ul>
     </div>
     <div class="view-todo-btns">
-      <button class="edit-btn" data-id="${todoInfo.id}">Edit</button>
+
       <button class="close-btn">Close</button>
     </div>  
   `;
