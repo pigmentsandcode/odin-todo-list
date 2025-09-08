@@ -134,10 +134,6 @@ export class TodoList {
     return this.projects;
   }
 
-  getTodos() {
-    return this.todos;
-  }
-
   getDefaultId() {
     return this.defaultId;
   }
@@ -172,21 +168,6 @@ export class TodoList {
       this.projects.get(newProjectId).addTodo(todoId);
       this.todos.get(todoId).setProjectId(newProjectId);
       this.projects.get(oldProjectId).removeTodo(todoId);
-    });
-  }
-
-  printDefaultProject() {
-    const defaultProject = this.projects.get(this.defaultId);
-    console.log("This is default id: " + this.defaultId);
-    console.log("This is default project title: " + defaultProject.getTitle());
-    console.log(
-      "This is default todos ids: " + defaultProject.getProjectTodos()
-    );
-  }
-
-  printTodos() {
-    this.todos.forEach((todo) => {
-      console.log(todo.getTodo());
     });
   }
 }

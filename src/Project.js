@@ -37,14 +37,6 @@ export class Project {
     return [...this.todos];
   }
 
-  getProject() {
-    return {
-      id: this.id,
-      title: this.title,
-      projectTodos: this.todos,
-    };
-  }
-
   clearTodos() {
     this.todos = [];
   }
