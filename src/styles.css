@@ -99,7 +99,7 @@ nav {
 /*  Todos List  */
 
 .todo-list {
-  gap: 2px;
+  margin-bottom: 1.25rem;
 }
 
 /*  Todos List Item */
@@ -134,6 +134,22 @@ nav {
 
 .todo-due-date {
   font-size: 1.25rem;
+}
+
+/*  Completed Section */
+.completed-header-div {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.completed-header-div h3 {
+  font-size: 2rem;
+}
+
+.del-complete-btn {
+  height: fit-content;
+  padding: 0.25rem;
 }
 
 /*  View Todo Popup */
