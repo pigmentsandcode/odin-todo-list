@@ -1,3 +1,4 @@
+const { format } = require("date-fns");
 import { getPopup } from "./html-templates";
 
 export class UIController {
@@ -38,6 +39,8 @@ export class UIController {
     todoTitleEl.addEventListener("click", handlers.viewTodoClick);
     todoItemTopEl.appendChild(todoTitleEl);
 
+    const todoBtnsDivEl = document.createElement("div");
+    todoBtnsDivEl.classList = "todo-btns-div";
     const todoEditBtnEl = this.createButtonElement(
       "edit-btn",
       todo.id,
@@ -45,7 +48,7 @@ export class UIController {
       handlers.todoEditClick
     );
     todoEditBtnEl.setAttribute("data-project", projectID);
-    todoItemTopEl.appendChild(todoEditBtnEl);
+    todoBtnsDivEl.appendChild(todoEditBtnEl);
 
     const todoDelBtnEl = this.createButtonElement(
       "delete-btn",
@@ -53,8 +56,9 @@ export class UIController {
       "Delete",
       handlers.todoDelClick
     );
-    todoItemTopEl.appendChild(todoDelBtnEl);
+    todoBtnsDivEl.appendChild(todoDelBtnEl);
 
+    todoItemTopEl.appendChild(todoBtnsDivEl);
     todoItemULEl.appendChild(todoItemTopEl);
     /* Todo Item Bottom */
     const todoItemBottomEl = document.createElement("li");
@@ -62,8 +66,8 @@ export class UIController {
 
     const todoDueDateEl = document.createElement("div");
     todoDueDateEl.classList.add("todo-due-date");
-    // TODO: formate date
-    todoDueDateEl.textContent = todo.dueDate;
+    const dueDate = format(new Date(todo.dueDate), "MMM do, yyyy");
+    todoDueDateEl.textContent = dueDate;
     todoItemBottomEl.appendChild(todoDueDateEl);
 
     const todoPriorityEl = document.createElement("div");
@@ -224,6 +228,8 @@ export class UIController {
         todoTitleEl.addEventListener("click", handlers.viewTodoClick);
         todoItemTopEl.appendChild(todoTitleEl);
 
+        const todoBtnsDivEl = document.createElement("div");
+        todoBtnsDivEl.classList = "todo-btns-div";
         const todoEditBtnEl = this.createButtonElement(
           "edit-btn",
           todo.id,
@@ -231,7 +237,7 @@ export class UIController {
           handlers.todoEditClick
         );
         todoEditBtnEl.setAttribute("data-project", projectID);
-        todoItemTopEl.appendChild(todoEditBtnEl);
+        todoBtnsDivEl.appendChild(todoEditBtnEl);
 
         const todoDelBtnEl = this.createButtonElement(
           "delete-btn",
@@ -239,8 +245,8 @@ export class UIController {
           "Delete",
           handlers.todoDelClick
         );
-        todoItemTopEl.appendChild(todoDelBtnEl);
-
+        todoBtnsDivEl.appendChild(todoDelBtnEl);
+        todoItemTopEl.appendChild(todoBtnsDivEl);
         todoItemULEl.appendChild(todoItemTopEl);
         /* Todo Item Bottom */
         const todoItemBottomEl = document.createElement("li");
@@ -248,8 +254,8 @@ export class UIController {
 
         const todoDueDateEl = document.createElement("div");
         todoDueDateEl.classList.add("todo-due-date");
-        // TODO: formate date
-        todoDueDateEl.textContent = todo.dueDate;
+        const dueDate = format(new Date(todo.dueDate), "MMM do, yyyy");
+        todoDueDateEl.textContent = dueDate;
         todoItemBottomEl.appendChild(todoDueDateEl);
 
         const todoPriorityEl = document.createElement("div");

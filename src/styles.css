@@ -103,6 +103,10 @@ nav {
 }
 
 /*  Todos List Item */
+.todo-list-item {
+  margin-bottom: 0.75rem;
+}
+
 .todo-top {
   display: flex;
   gap: 1rem;
@@ -117,11 +121,19 @@ nav {
   height: 1.25rem;
 }
 
+.todo-btns-div button {
+  margin: 0 0.3rem;
+}
+
 .todo-bottom {
   display: flex;
   gap: 1.2rem;
-  font-size: 1.12rem;
   align-items: center;
+  margin-top: 0.3rem;
+}
+
+.todo-due-date {
+  font-size: 1.25rem;
 }
 
 /*  View Todo Popup */
