@@ -325,7 +325,8 @@ export class UIController {
   removeTodoItem(todoID, delCompletedClick) {
     const todoListItemEl = document.querySelector(`li[data-id="${todoID}"]`);
     todoListItemEl.remove();
-    if (!document.querySelector(".complete-todo-list").hasChildNodes()) {
+    const completedEl = document.querySelector(".complete-todo-list");
+    if (completedEl && !completedEl.hasChildNodes()) {
       this.removeCompletedTodos(delCompletedClick);
     }
   }
