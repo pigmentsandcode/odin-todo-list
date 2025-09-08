@@ -73,21 +73,27 @@ nav {
 .project-title-div {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
+  align-items: center;
 }
 
 .project-title-div h2 {
   font-size: 3.5rem;
 }
 
+.project-title-btns {
+  display: flex;
+  gap: 0.75rem;
+}
+
 .project-title-div button {
   height: 2rem;
-  align-self: center;
 }
 
 .project-btns-div {
   display: flex;
-  gap: 4rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 /*  Todos List  */

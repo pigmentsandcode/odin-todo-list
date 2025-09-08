@@ -132,13 +132,16 @@ export class UIController {
     projectTitleDiv.appendChild(projectTitleEl);
 
     if (projectTitleText !== "Default") {
+      const projectTitleBtnsDiv = document.createElement("div");
+      projectTitleBtnsDiv.classList = "project-title-btns";
+
       const projectEditBtnEl = this.createButtonElement(
         "edit-btn",
         projectID,
         "Edit",
         handlers.projectEditClick
       );
-      projectTitleDiv.appendChild(projectEditBtnEl);
+      projectTitleBtnsDiv.appendChild(projectEditBtnEl);
 
       const projectDelBtnEl = this.createButtonElement(
         "delete-btn",
@@ -146,7 +149,8 @@ export class UIController {
         "Delete",
         handlers.projectDelClick
       );
-      projectTitleDiv.appendChild(projectDelBtnEl);
+      projectTitleBtnsDiv.appendChild(projectDelBtnEl);
+      projectTitleDiv.appendChild(projectTitleBtnsDiv);
     }
 
     mainContentEl.appendChild(projectTitleDiv);
