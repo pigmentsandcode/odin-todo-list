@@ -29,6 +29,10 @@ ul {
   list-style: none;
 }
 
+hr {
+  margin-right: 2rem;
+}
+
 header {
   font-size: 2rem;
   background-color: lightblue;
@@ -192,13 +196,13 @@ nav {
 }
 
 .high-priority {
-  background: lightpink;
+  background: rgb(231 172 181);
 }
 
 .medium-priority {
-  background: rgb(212, 111, 71);
+  background: rgb(227 156 116 / 68%);
 }
 
 .low-priority {
-  background: rgb(98, 126, 179);
+  background: rgb(172 191 229);
 }
