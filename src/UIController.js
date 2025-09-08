@@ -108,7 +108,7 @@ export class UIController {
     const projectItem = document.createElement("li");
     projectItem.classList.add("nav-project-item");
     projectItem.setAttribute("data-id", project.id);
-    projectItem.textContent = project.title;
+    projectItem.textContent = `> ${project.title}`;
     projectItem.addEventListener("click", handleNavProjectClick);
     navProjectsListEl.appendChild(projectItem);
   }
