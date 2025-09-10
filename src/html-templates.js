@@ -17,7 +17,6 @@ export function getPopup(popupType, data = {}, popupAction = "") {
   return `
     <dialog class="popup ${generalType}-popup" id="${generalType}">
     <div class="popup-header">
-    <h3 class="popup-title">Popup</h3>
     <div class="popup-exit">X</div>
     </div>
     ${popupHTML}
@@ -46,6 +45,7 @@ function getTodoForm(action, data) {
           action === "edit" ? data.todoID : ""
         }" data-project="${currProjectID}">
           <div class="popup-input-title popup-input-area">
+          <label for="mainTitle"><span>Title</span></label>
             <input
               class="popup-input"
               type="text"
@@ -54,30 +54,33 @@ function getTodoForm(action, data) {
               value="${todoInfo.title ? todoInfo.title : ""}"
               required
             />
-            <label for="mainTitle"><span>Title</span></label>
           </div>
           <div class="popup-input-description popup-input-area">
-            <textarea
+          <label for="description"><span>Description</span></label>  
+          <textarea
               name="description"
               id="description"
               class="popup-input"
               value="${todoInfo.description ? todoInfo.description : ""}"
-            ></textarea>
-            <label for="description"><span>Description</span></label>
+            >${todoInfo.description ? todoInfo.description : ""}</textarea>
+            
           </div>
           <div class="popup-input-area popup-input-project">
+            <label for="project"><span>Project</span></label>
             <select name="project" id="project">
               ${projectsHTML.join("")}
             </select>
-            <label for="project"><span>Project</span></label>
+            
           </div>
           <div class="popup-input-area popup-input-date">
+            <label for="dueDate"><span>Due Date</span></label>
             <input type="date" class="popup-input" id="dueDate" name="dueDate" required value="${
               action === "edit" ? dueDate : ""
             }" />
-            <label for="dueDate"><span>Due Date</span></label>
+            
           </div>
           <div class="popup-input-area popup-input-priority">
+          <label for="priority"><span>Priority</span></label>
             <select name="priority" id="priority">
               <option value="low" ${
                 todoInfo.priority && todoInfo.priority === "low"
@@ -109,10 +112,11 @@ function getProjectForm(action, data) {
       action === "edit" ? data.projectID : ""
     }">
     <div class="popup-input-title popup-input-area">
+        <label for="mainTitle"><span>Title</span></label>
         <input type="text" class="popup-input" id="mainTitle" name="mainTitle" value="${
           data.currTitle ? data.currTitle : ""
         }" />
-        <label for="mainTitle"><span>Title</span></label>
+        
     </div>
     <button class="popup-btn btn" type="submit">${
       action === "add" ? "Add" : "Edit"
@@ -134,6 +138,7 @@ function getViewTodo(data) {
     <div class="view-todo-info">
       <ul class="view-info-ul">
         <li>
+          <label for="description"><span>Description:</span></label> 
           <p class="todo-description">${todoInfo.description}</p>
         </li>
         <li>

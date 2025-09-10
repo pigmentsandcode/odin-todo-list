@@ -156,15 +156,33 @@ nav {
   padding: 0.25rem;
 }
 
+/*  Popup Styles  */
+.popup-header {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 0.5rem;
+}
+
+.popup-input-area {
+  display: grid;
+  grid-template-columns: 8vw 20vw;
+  margin-bottom: 0.5rem;
+}
+
+.todo-popup .popup-btn {
+  margin-top: 1rem;
+}
+
+.project-todo .popup-btn {
+  margin-top: 0.5rem;
+}
+
 /*  View Todo Popup */
 .view-popup {
   width: 40vw;
   height: 40vh;
-}
-
-.popup-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 1fr 2fr 25vh 1fr;
 }
 
 .title-div {
@@ -189,6 +207,8 @@ nav {
 .view-info-ul li {
   margin: 0.5rem 0;
 }
+
+/*  Priority display */
 
 .priority {
   border-radius: 15%;
