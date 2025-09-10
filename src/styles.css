@@ -173,8 +173,21 @@ nav {
   margin-top: 1rem;
 }
 
-.project-todo .popup-btn {
+.project-popup .popup-btn {
   margin-top: 0.5rem;
+}
+
+.confirm-popup {
+  max-width: 50vw;
+}
+
+.confirm-popup .popup-text {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+#confirm-btn {
+  margin-left: 0.5rem;
 }
 
 /*  View Todo Popup */
