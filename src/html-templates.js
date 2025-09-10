@@ -38,6 +38,8 @@ function getTodoForm(action, data) {
   if (action === "edit") {
     const dataDate = new Date(todoInfo.dueDate);
     dueDate = format(dataDate, "yyyy-MM-dd");
+  } else {
+    dueDate = format(new Date(), "yyyy-MM-dd");
   }
 
   return `
@@ -74,9 +76,7 @@ function getTodoForm(action, data) {
           </div>
           <div class="popup-input-area popup-input-date">
             <label for="dueDate"><span>Due Date</span></label>
-            <input type="date" class="popup-input" id="dueDate" name="dueDate" required value="${
-              action === "edit" ? dueDate : ""
-            }" />
+            <input type="date" class="popup-input" id="dueDate" name="dueDate" required value="${dueDate}" />
             
           </div>
           <div class="popup-input-area popup-input-priority">
